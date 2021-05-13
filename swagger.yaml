@@ -1,0 +1,27 @@
+swagger: '2.0'
+info:
+  version: "1.0"
+  title: 'シス研人数出る霜'
+  description: 'シス研の部室にいる人の人数を教えてくれる'
+tags: 
+- name: "people"
+
+paths:
+  /people:
+    post:
+      tags:
+      - "people"
+      summary: "今部屋にいる人数を返す"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: 'response'
+          schema: 
+            type: 'object'
+            properties:
+              people:
+                type: 'number'
