@@ -1,0 +1,14 @@
+version: "3"
+services:
+  api:
+    container_name: koukaten2021_api
+    build: ./go
+    volumes:
+      - ./go/app:/app
+    ports:
+      - "8081:80"
+    networks:
+      - koukaten2021_network
+networks:
+  koukaten2021_network:
+    external: true
