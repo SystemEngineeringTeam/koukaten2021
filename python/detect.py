@@ -18,6 +18,7 @@ def detect(opt):
     source, weights, view_img, save_txt, imgsz = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size
     save_img = not opt.nosave and not source.endswith(
         '.txt')  # save inference images
+    print("source: " + opt.source)
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://', 'https://'))
 
@@ -171,7 +172,7 @@ if __name__ == '__main__':
                         default='yolov5s.pt', help='model.pt path(s)')
     # file/folder, 0 for webcam
     parser.add_argument('--source', type=str,
-                        default='data/images', help='source')
+                        default='0', help='source')
     parser.add_argument('--img-size', type=int, default=640,
                         help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float,
@@ -211,7 +212,6 @@ if __name__ == '__main__':
     parser.add_argument('--hide-conf', default=False,
                         action='store_true', help='hide confidences')
     opt = parser.parse_args()
-    print(opt)
     check_requirements(exclude=('tensorboard', 'pycocotools', 'thop'))
 
     with torch.no_grad():
