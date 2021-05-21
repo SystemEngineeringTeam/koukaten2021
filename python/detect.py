@@ -98,6 +98,7 @@ def detect(opt):
             # normalization gain whwh
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]
             imc = im0.copy() if opt.save_crop else im0  # for opt.save_crop
+            people = 0
             if len(det):
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(
@@ -108,6 +109,8 @@ def detect(opt):
                     n = (det[:, -1] == c).sum()  # detections per class
                     # add to string
                     s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "
+                    if c == 0:
+                        people = int(n)
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
@@ -129,6 +132,7 @@ def detect(opt):
                         if opt.save_crop:
                             save_one_box(
                                 xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
+            print(people)
 
             # Print time (inference + NMS)
             # print(f'{s}Done. ({t2 - t1:.3f}s)')
@@ -140,7 +144,11 @@ def detect(opt):
 
             # Save results (image with detections)
             if save_img:
-                if dataset.mode == 'image':
+                if source == '0':
+                    save_path += '.jpg'
+                    cv2.imwrite(save_path, im0)
+                    return
+                elif dataset.mode == 'image':
                     cv2.imwrite(save_path, im0)
                 else:  # 'video' or 'stream'
                     if vid_path != save_path:  # new video
