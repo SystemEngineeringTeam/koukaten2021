@@ -89,4 +89,12 @@ sw.*
 # Vim swap files
 *.swp
 
+# VSCode
 .vscode/
+
+# Python project
+__pycache__/
+
+# YOLOv5
+/python/runs
+*.pt
