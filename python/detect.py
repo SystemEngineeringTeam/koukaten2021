@@ -176,7 +176,7 @@ def detect(opt):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--weights', nargs='+', type=str,
-                        default='yolov5s.pt', help='model.pt path(s)')
+                        default='yolov5x6.pt', help='model.pt path(s)')
     # file/folder, 0 for webcam
     parser.add_argument('--source', type=str,
                         default='0', help='source')
