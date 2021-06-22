@@ -15,40 +15,51 @@ from utils.torch_utils import select_device, load_classifier, time_synchronized
 
 
 def detect(opt):
+    # 引数を代入
+    # source = 検出を行う画像，動画
+    # weights = 検出に使用する重み
+    # view_img = 出力結果を画面に表示するかどうか
+    # save_txt = 出力結果をテキストファイルとして出力するかどうか
+    # imgsz = 推測サイズ(ピクセル)
     source, weights, view_img, save_txt, imgsz = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size
     save_img = not opt.nosave and not source.endswith(
         '.txt')  # save inference images
+    # ソースがウェブカメラであるかどうか
+    # 今回のプロジェクトでは，これは必ずTrueになる．（source.isnumeric()はtrueであるため）
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://', 'https://'))
 
-    # Directories
+    # 出力ファイルを保存するためのパスを求めている
     save_dir = increment_path(
         Path(opt.project) / opt.name, exist_ok=opt.exist_ok)  # increment run
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True,
                                                           exist_ok=True)  # make dir
 
-    # Initialize
+    # 初期化
     set_logging()
     device = select_device(opt.device)
+    # 今回はcpuでの検出しか行わない予定なので，必ずFalseになる．
     half = device.type != 'cpu'  # half precision only supported on CUDA
 
-    # Load model
+    # モデルの読み込み
     model = attempt_load(weights, map_location=device)  # load FP32 model
     stride = int(model.stride.max())  # model stride
     imgsz = check_img_size(imgsz, s=stride)  # check img_size
+    # モデルの名前を取得する(人間はnames[0])
     names = model.module.names if hasattr(
-        model, 'module') else model.names  # get class names
+        model, 'module') else model.names
     if half:
         model.half()  # to FP16
 
     # Second-stage classifier
     classify = False
+    # ここ，必ずFalseにならない？
     if classify:
         modelc = load_classifier(name='resnet101', n=2)  # initialize
         modelc.load_state_dict(torch.load(
             'weights/resnet101.pt', map_location=device)['model']).to(device).eval()
 
-    # Set Dataloader
+    # Set Dataloaderccvvvvvvvvvvvvvvv  vv
     vid_path, vid_writer = None, None
     if webcam:
         view_img = check_imshow()
