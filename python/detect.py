@@ -15,34 +15,45 @@ from utils.torch_utils import select_device, load_classifier, time_synchronized
 
 
 def detect(opt):
+    # 引数を代入
+    # source = 検出を行う画像，動画
+    # weights = 検出に使用する重み
+    # view_img = 出力結果を画面に表示するかどうか
+    # save_txt = 出力結果をテキストファイルとして出力するかどうか
+    # imgsz = 推測サイズ(ピクセル)
     source, weights, view_img, save_txt, imgsz = opt.source, opt.weights, opt.view_img, opt.save_txt, opt.img_size
     save_img = not opt.nosave and not source.endswith(
         '.txt')  # save inference images
+    # ソースがウェブカメラであるかどうか
+    # 今回のプロジェクトでは，これは必ずTrueになる．（source.isnumeric()はtrueであるため）
     webcam = source.isnumeric() or source.endswith('.txt') or source.lower().startswith(
         ('rtsp://', 'rtmp://', 'http://', 'https://'))
 
-    # Directories
+    # 出力ファイルを保存するためのパスを求めている
     save_dir = increment_path(
         Path(opt.project) / opt.name, exist_ok=opt.exist_ok)  # increment run
     (save_dir / 'labels' if save_txt else save_dir).mkdir(parents=True,
                                                           exist_ok=True)  # make dir
 
-    # Initialize
+    # 初期化
     set_logging()
     device = select_device(opt.device)
+    # 今回はcpuでの検出しか行わない予定なので，必ずFalseになる．
     half = device.type != 'cpu'  # half precision only supported on CUDA
 
-    # Load model
+    # モデルの読み込み
     model = attempt_load(weights, map_location=device)  # load FP32 model
     stride = int(model.stride.max())  # model stride
     imgsz = check_img_size(imgsz, s=stride)  # check img_size
+    # モデルの名前を取得する(人間はnames[0])
     names = model.module.names if hasattr(
-        model, 'module') else model.names  # get class names
+        model, 'module') else model.names
     if half:
         model.half()  # to FP16
 
     # Second-stage classifier
     classify = False
+    # ここ，必ずFalseにならない？
     if classify:
         modelc = load_classifier(name='resnet101', n=2)  # initialize
         modelc.load_state_dict(torch.load(
@@ -50,18 +61,26 @@ def detect(opt):
 
     # Set Dataloader
     vid_path, vid_writer = None, None
+    # ここは必ずTrueになる
     if webcam:
+        # imshowが可能かどうか判定する
         view_img = check_imshow()
         cudnn.benchmark = True  # set True to speed up constant image size inference
+        # LoadStreamsクラスを初期化して受け取る
         dataset = LoadStreams(source, img_size=imgsz, stride=stride)
     else:
         dataset = LoadImages(source, img_size=imgsz, stride=stride)
 
-    # Run inference
+    # 恐らく，必ずFalseになる．
     if device.type != 'cpu':
         model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(
             next(model.parameters())))  # run once
+    # 開始時間
     t0 = time.time()
+    # データセットの数だけ繰り返す
+    # LoadStreamsの__next__を参照
+    # pathはsourceをclean_strにかけたもの,imgは画像のデータ，
+    # im0sはimgの配列？, vid_capはNone
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -74,6 +93,8 @@ def detect(opt):
         pred = model(img, augment=opt.augment)[0]
 
         # Apply NMS
+        # NMSは，同じクラスとして重複して認識された状態を抑制するアルゴリズム．
+        # 例えば，同じ顔が3回認識されているといった状態を防ぐ．
         pred = non_max_suppression(
             pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
         t2 = time_synchronized()
@@ -83,7 +104,9 @@ def detect(opt):
             pred = apply_classifier(pred, modelc, img, im0s)
 
         # Process detections
+        # for文だが，実験してみたところ，1フレームにつき1度しか回っていなかった．
         for i, det in enumerate(pred):  # detections per image
+            # 以下，出力，保存用の文字列設定
             if webcam:  # batch_size >= 1
                 p, s, im0, frame = path[i], f'{i}: ', im0s[i].copy(
                 ), dataset.count
@@ -99,6 +122,7 @@ def detect(opt):
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]
             imc = im0.copy() if opt.save_crop else im0  # for opt.save_crop
             people = 0
+            # detは実質的な検出結果
             if len(det):
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(
