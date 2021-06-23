@@ -96,5 +96,5 @@ sw.*
 __pycache__/
 
 # YOLOv5
-/python/runs
+runs/
 *.pt
