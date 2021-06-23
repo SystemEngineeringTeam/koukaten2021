@@ -59,19 +59,23 @@ def detect(opt):
         modelc.load_state_dict(torch.load(
             'weights/resnet101.pt', map_location=device)['model']).to(device).eval()
 
-    # Set Dataloaderccvvvvvvvvvvvvvvv  vv
+    # Set Dataloader
     vid_path, vid_writer = None, None
+    # ここは必ずTrueになる
     if webcam:
+        # imshowが可能かどうか判定する
         view_img = check_imshow()
         cudnn.benchmark = True  # set True to speed up constant image size inference
+        # LoadStreamsクラスを初期化して受け取る
         dataset = LoadStreams(source, img_size=imgsz, stride=stride)
     else:
         dataset = LoadImages(source, img_size=imgsz, stride=stride)
 
-    # Run inference
+    # 恐らく，必ずFalseになる．
     if device.type != 'cpu':
         model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(
             next(model.parameters())))  # run once
+    # 開始時間
     t0 = time.time()
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
