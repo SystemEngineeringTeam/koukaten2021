@@ -77,6 +77,10 @@ def detect(opt):
             next(model.parameters())))  # run once
     # 開始時間
     t0 = time.time()
+    # データセットの数だけ繰り返す
+    # LoadStreamsの__next__を参照
+    # pathはsourceをclean_strにかけたもの,imgは画像のデータ，
+    # im0sはimgの配列？, vid_capはNone
     for path, img, im0s, vid_cap in dataset:
         img = torch.from_numpy(img).to(device)
         img = img.half() if half else img.float()  # uint8 to fp16/32
@@ -89,6 +93,8 @@ def detect(opt):
         pred = model(img, augment=opt.augment)[0]
 
         # Apply NMS
+        # NMSは，同じクラスとして重複して認識された状態を抑制するアルゴリズム．
+        # 例えば，同じ顔が3回認識されているといった状態を防ぐ．
         pred = non_max_suppression(
             pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
         t2 = time_synchronized()
@@ -98,7 +104,9 @@ def detect(opt):
             pred = apply_classifier(pred, modelc, img, im0s)
 
         # Process detections
+        # for文だが，実験してみたところ，1フレームにつき1度しか回っていなかった．
         for i, det in enumerate(pred):  # detections per image
+            # 以下，出力，保存用の文字列設定
             if webcam:  # batch_size >= 1
                 p, s, im0, frame = path[i], f'{i}: ', im0s[i].copy(
                 ), dataset.count
@@ -114,6 +122,7 @@ def detect(opt):
             gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]
             imc = im0.copy() if opt.save_crop else im0  # for opt.save_crop
             people = 0
+            # detは実質的な検出結果
             if len(det):
                 # Rescale boxes from img_size to im0 size
                 det[:, :4] = scale_coords(
