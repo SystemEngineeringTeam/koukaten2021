@@ -1,5 +1,5 @@
-BACK=geekcamp_go
-DB=geekcamp_mysql
+BACK=koukaten2021_api
+DB=koukaten_mysql
 BACK_SERVICE = backend
 DB_SERVICE = mysql
 
