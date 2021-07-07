@@ -29,7 +29,6 @@ func Getpeople(w http.ResponseWriter, r *http.Request) {
 		var Guests []Guest
 
 		// TODO:関数からexec使える様にする
-		d
 
 		Guests = append(Guests, Guest{People: 114514})
 		//fmt.Print(Guests)
