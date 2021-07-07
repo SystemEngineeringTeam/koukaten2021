@@ -212,13 +212,18 @@ def detect2(opt):
         model, 'module') else model.names
 
     save_img = not opt.nosave and not opt.source.endswith('.txt')
-    cap = cv2.VideoCapture(opt.source)
+    s = eval(opt.source) if opt.source.isnumeric() else opt.source
+    cap = cv2.VideoCapture(s)
+    stride = int(model.stride.max())
+    vid_path, vid_writer = None, None
 
-    for times in range(5): 
+    for times in range(1000): 
         _, img0 = cap.read()
-        """
+        # cv2.imshow('name', img0)
+        # cv2.waitKey(1)
+
         # Letterbox
-        img = letterbox(img0, opt.img_size, stride=opt.stride)[0]
+        img = letterbox(img0, opt.img_size, stride=stride)[0]
 
         # Stack
         img = np.stack(img, 0)
@@ -251,7 +256,7 @@ def detect2(opt):
         # for文だが，実験してみたところ，1フレームにつき1度しか回っていなかった．
         for i, det in enumerate(pred):  # detections per image
             # 以下，出力，保存用の文字列設定
-            p, s, im0, frame = opt.source, f'{i}: ', im0.copy(), times
+            p, s, im0, frame = opt.source, f'{i}: ', img0.copy(), times
 
             p = Path(p)  # to Path
             save_path = str(save_dir / p.name)  # img.jpg
@@ -301,7 +306,7 @@ def detect2(opt):
             # print(f'{s}Done. ({t2 - t1:.3f}s)')
 
             # Stream results
-            if opt.view_img:
+            if view_img:
                 cv2.imshow(str(p), im0)
                 cv2.waitKey(1)  # 1 millisecond
 
@@ -319,7 +324,6 @@ def detect2(opt):
 
     # if save_txt or save_img:
         # s = f"\n{len(list(save_dir.glob('labels/*.txt')))} labels saved to {save_dir / 'labels'}" if save_txt else ''
-        """
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -372,7 +376,9 @@ if __name__ == '__main__':
     with torch.no_grad():
         if opt.update:  # update all models (to fix SourceChangeWarning)
             for opt.weights in ['yolov5s.pt', 'yolov5m.pt', 'yolov5l.pt', 'yolov5x.pt']:
-                detect(opt=opt)
+                # detect(opt=opt)
+                detect2(opt=opt)
                 strip_optimizer(opt.weights)
         else:
-            detect(opt=opt)
+            # detect(opt=opt)
+            detect2(opt=opt)
