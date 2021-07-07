@@ -216,7 +216,9 @@ def detect2(opt):
     stride = int(model.stride.max())
     vid_path, vid_writer = None, None
 
-    for times in range(1000):
+    people = np.empty(0, dtype=int)
+
+    for times in range(5):
         _, img0 = cap.read()
         # cv2.imshow('name', img0)
         # cv2.waitKey(1)
@@ -260,18 +262,13 @@ def detect2(opt):
         # normalization gain whwh
         gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]
         imc = im0.copy() if opt.save_crop else im0  # for opt.save_crop
-        people = 0
         # detは実質的な検出結果
         if len(det):
             # Rescale boxes from img_size to im0 size
             det[:, :4] = scale_coords(
                 img.shape[2:], det[:, :4], im0.shape).round()
 
-            # Print results
-            for c in det[:, -1].unique():
-                n = (det[:, -1] == c).sum()  # detections per class
-                if c == 0:
-                    people = int(n)
+            people = np.append(people, int((det[:, -1] == 0).sum()))
 
             # Write results
             for *xyxy, conf, cls in reversed(det):
@@ -293,28 +290,29 @@ def detect2(opt):
                     if opt.save_crop:
                         save_one_box(
                             xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
-        print(people)
 
-        # Print time (inference + NMS)
-        # print(f'{s}Done. ({t2 - t1:.3f}s)')
+    print(np.argmax(np.bincount(people)))
 
-        # Stream results
-        if view_img:
-            cv2.imshow(str(p), im0)
-            cv2.waitKey(1)  # 1 millisecond
+    # Print time (inference + NMS)
+    # print(f'{s}Done. ({t2 - t1:.3f}s)')
 
-        # Save results (image with detections)
-        if save_img:
-            if vid_path != save_path:  # new video
-                vid_path = save_path
-                if isinstance(vid_writer, cv2.VideoWriter):
-                    vid_writer.release()  # release previous video writer
+    # Stream results
+    if view_img:
+        cv2.imshow(str(p), im0)
+        cv2.waitKey(1)  # 1 millisecond
 
-                fps, w, h = 30, im0.shape[1], im0.shape[0]
-                save_path += '.mp4'
-                vid_writer = cv2.VideoWriter(
-                    save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
-            vid_writer.write(im0)
+    # Save results (image with detections)
+    if save_img:
+        if vid_path != save_path:  # new video
+            vid_path = save_path
+            if isinstance(vid_writer, cv2.VideoWriter):
+                vid_writer.release()  # release previous video writer
+
+            fps, w, h = 30, im0.shape[1], im0.shape[0]
+            save_path += '.mp4'
+            vid_writer = cv2.VideoWriter(
+                save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
+        vid_writer.write(im0)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
