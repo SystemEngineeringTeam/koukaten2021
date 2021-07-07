@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"os/exec"
 )
 
 //MySQLの事も考えて構造体にあえて実装
@@ -30,12 +29,7 @@ func Getpeople(w http.ResponseWriter, r *http.Request) {
 		var Guests []Guest
 
 		// TODO:関数からexec使える様にする
-		out, err := exec.Command("python", "../../python/detect.py").Output()
-		if err != nil {
-			fmt.Println("Command Exec Error.")
-		}
-		// 実行したコマンドの結果を出力
-		fmt.Printf("\n%s", string(out))
+		d
 
 		Guests = append(Guests, Guest{People: 114514})
 		//fmt.Print(Guests)
