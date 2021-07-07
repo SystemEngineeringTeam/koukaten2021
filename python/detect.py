@@ -237,8 +237,6 @@ def detect2(opt):
         if img.ndimension() == 3:
             img = img.unsqueeze(0)
 
-        # Inference
-        t1 = time_synchronized()
         pred = model(img, augment=opt.augment)[0]
 
         # Apply NMS
@@ -246,23 +244,19 @@ def detect2(opt):
         # 例えば，同じ顔が3回認識されているといった状態を防ぐ．
         pred = non_max_suppression(
             pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
-        t2 = time_synchronized()
 
         # Apply Classifier
         # if classify:
         # pred = apply_classifier(pred, modelc, img, im0s)
 
         # Process detections
-        # for文だが，実験してみたところ，1フレームにつき1度しか回っていなかった．
-        det = pred[0]  # detections per image
-            # 以下，出力，保存用の文字列設定
-        p, s, im0, frame = opt.source, f'{times}: ', img0.copy(), times
-
-        p = Path(p)  # to Path
+        det = pred[0]
+        # 以下，出力，保存用の文字列設定
+        im0, frame = img0.copy(), times
+        
+        p = Path(opt.source)  # to Path
         save_path = str(save_dir / p.name)  # img.jpg
-        txt_path = str(save_dir / 'labels' / p.stem) + \
-            f'_{frame}'  # img.txt
-        s += '%gx%g ' % img.shape[2:]  # print string
+        txt_path = str(save_dir / 'labels' / p.stem) + f'_{frame}'  # img.txt
         # normalization gain whwh
         gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]
         imc = im0.copy() if opt.save_crop else im0  # for opt.save_crop
@@ -276,8 +270,6 @@ def detect2(opt):
             # Print results
             for c in det[:, -1].unique():
                 n = (det[:, -1] == c).sum()  # detections per class
-                # add to string
-                s += f"{n} {names[int(c)]}{'s' * (n > 1)}, "
                 if c == 0:
                     people = int(n)
 
@@ -323,10 +315,6 @@ def detect2(opt):
                 vid_writer = cv2.VideoWriter(
                     save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
             vid_writer.write(im0)
-
-    # if save_txt or save_img:
-        # s = f"\n{len(list(save_dir.glob('labels/*.txt')))} labels saved to {save_dir / 'labels'}" if save_txt else ''
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
