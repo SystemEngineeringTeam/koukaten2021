@@ -19,9 +19,15 @@ export default new Vuex.Store({
     },
 
     actions: {
-        async getPeple(people){
+        async getPeople(people){
             await axios
-            .get('http://localhost:')
+            .get('http://localhost:8081/people')
+            .then((res) => {
+                context.commit("setPeople", );
+            })
+            .catch(() => {
+                console.log("peopelの取得が失敗しました。")
+            });
         },
     },
 });
