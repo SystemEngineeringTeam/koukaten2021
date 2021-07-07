@@ -3,15 +3,12 @@ package main
 import (
 	"log"
 	"net/http"
+
+	"set1.ie.aitech.ac.jp/koukaten2021/apifuncs"
 )
 
-func hoge(http.ResponseWriter, *http.Request) {
-	log.Print("Accessed /")
-}
-
 func main() {
-	log.Print("hello world\n")
-	http.HandleFunc("/", hoge)
-
+	http.HandleFunc("/people", apifuncs.Getpeople)
 	http.ListenAndServe(":80", nil)
+	log.Print("起動しました\n")
 }
