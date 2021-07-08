@@ -15,7 +15,7 @@ from utils.plots import colors, plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 
 
-def detect(opt):
+def old_detect(opt):
     # 引数を代入
     # source = 検出を行う画像，動画
     # weights = 検出に使用する重み
@@ -198,7 +198,7 @@ def detect(opt):
     # print(f'Done. ({time.time() - t0:.3f}s)')
 
 
-def detect2(opt):
+def detect(opt):
     # 以下初期化
     # 保存用のディレクトリを生成
     save_dir = increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok)  # increment run
@@ -318,7 +318,7 @@ def detect2(opt):
             save_path += '.mp4'
             vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
         vid_writer.write(img0)
-        
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -371,9 +371,9 @@ if __name__ == '__main__':
     with torch.no_grad():
         if opt.update:  # update all models (to fix SourceChangeWarning)
             for opt.weights in ['yolov5s.pt', 'yolov5m.pt', 'yolov5l.pt', 'yolov5x.pt']:
-                # detect(opt=opt)
-                detect2(opt=opt)
+                detect(opt=opt)
+                old_detect(opt=opt)
                 strip_optimizer(opt.weights)
         else:
-            # detect(opt=opt)
-            detect2(opt=opt)
+            detect(opt=opt)
+            old_detect(opt=opt)
