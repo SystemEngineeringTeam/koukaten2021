@@ -169,10 +169,6 @@ def old_detect(opt):
 
             # Save results (image with detections)
             if save_img:
-                # if source == '0':
-                # save_path += '.jpg'
-                # cv2.imwrite(save_path, im0)
-                # return
                 if dataset.mode == 'image':
                     cv2.imwrite(save_path, im0)
                 else:  # 'video' or 'stream'
@@ -230,7 +226,7 @@ def detect(opt):
     people = np.empty(0, dtype=int)
 
     # 何枚か撮影する
-    for frame in range(5):
+    for frame in range(opt.k):
         # 撮影
         _, img0 = cap.read()
 
@@ -299,7 +295,7 @@ def detect(opt):
                     if opt.save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
 
-    # 処理結果を出力
+    # 複数撮影した結果の，最頻値の値を出力する．
     print(np.argmax(np.bincount(people)))
 
     # 処理結果をimshow
@@ -365,6 +361,8 @@ if __name__ == '__main__':
                         action='store_true', help='hide labels')
     parser.add_argument('--hide-conf', default=False,
                         action='store_true', help='hide confidences')
+    parser.add_argument('--k', default=5,
+                        action='store_true', help='number of shots')
     opt = parser.parse_args()
     check_requirements(exclude=('tensorboard', 'pycocotools', 'thop'))
 
@@ -372,8 +370,8 @@ if __name__ == '__main__':
         if opt.update:  # update all models (to fix SourceChangeWarning)
             for opt.weights in ['yolov5s.pt', 'yolov5m.pt', 'yolov5l.pt', 'yolov5x.pt']:
                 detect(opt=opt)
-                old_detect(opt=opt)
+                # old_detect(opt=opt)
                 strip_optimizer(opt.weights)
         else:
             detect(opt=opt)
-            old_detect(opt=opt)
+            # old_detect(opt=opt)
