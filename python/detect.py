@@ -199,29 +199,42 @@ def detect(opt):
 
 
 def detect2(opt):
-    save_dir = increment_path(
-        Path(opt.project) / opt.name, exist_ok=opt.exist_ok)  # increment run
-    (save_dir / 'labels' if opt.save_txt else save_dir).mkdir(parents=True,
-                                                              exist_ok=True)  # make dir
-    view_img = check_imshow()
+    # 以下初期化
+    # 保存用のディレクトリを生成
+    save_dir = increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok)  # increment run
+    (save_dir / 'labels' if opt.save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
 
+    # 出力された画像を保存するかどうか
+    save_img = not opt.nosave and not opt.source.endswith('.txt')
+
+    # deviceを取得し，物体検知に使用するモデルをロード
     device = select_device(opt.device)
     model = attempt_load(opt.weights, map_location=device)  # load FP32 model
 
-    names = model.module.names if hasattr(
-        model, 'module') else model.names
+    # クラスの名前を取得
+    names = model.module.names if hasattr(model, 'module') else model.names
 
-    save_img = not opt.nosave and not opt.source.endswith('.txt')
-    cap = cv2.VideoCapture(eval(opt.source) if opt.source.isnumeric() else opt.source)
+    # Letterboxで必要なパラメータ
     stride = int(model.stride.max())
+
+    # ビデオを保存するパスとライターを初期化
     vid_path, vid_writer = None, None
 
+    # imshowが可能かチェック
+    view_img = check_imshow()
+
+    # カメラを起動
+    cap = cv2.VideoCapture(eval(opt.source) if opt.source.isnumeric() else opt.source)
+
+    # 人数を保存する配列
     people = np.empty(0, dtype=int)
 
-    for times in range(5):
+    # 何枚か撮影する
+    for frame in range(5):
+        # 撮影
         _, img0 = cap.read()
-        # cv2.imshow('name', img0)
-        # cv2.waitKey(1)
+
+        # 以下，読み取った画像を色々と変換
 
         # Letterbox
         img = letterbox(img0, opt.img_size, stride=stride)[0]
@@ -239,80 +252,73 @@ def detect2(opt):
         if img.ndimension() == 3:
             img = img.unsqueeze(0)
 
+        # 変換ここまで
+
+        # 判定
         pred = model(img, augment=opt.augment)[0]
 
         # Apply NMS
         # NMSは，同じクラスとして重複して認識された状態を抑制するアルゴリズム．
         # 例えば，同じ顔が3回認識されているといった状態を防ぐ．
-        pred = non_max_suppression(
-            pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
+        pred = non_max_suppression(pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
 
-        # Apply Classifier
-        # if classify:
-        # pred = apply_classifier(pred, modelc, img, im0s)
-
-        # Process detections
+        # 判定結果を取り出す
         det = pred[0]
-        # 以下，出力，保存用の文字列設定
-        im0, frame = img0.copy(), times
-        
+
+        # 保存用のパスを求める
         p = Path(opt.source)  # to Path
         save_path = str(save_dir / p.name)  # img.jpg
         txt_path = str(save_dir / 'labels' / p.stem) + f'_{frame}'  # img.txt
+        
         # normalization gain whwh
-        gn = torch.tensor(im0.shape)[[1, 0, 1, 0]]
-        imc = im0.copy() if opt.save_crop else im0  # for opt.save_crop
-        # detは実質的な検出結果
+        gn = torch.tensor(img0.shape)[[1, 0, 1, 0]]
+        # for opt.save_crop
+        imc = img0.copy() if opt.save_crop else img0 
         if len(det):
-            # Rescale boxes from img_size to im0 size
-            det[:, :4] = scale_coords(
-                img.shape[2:], det[:, :4], im0.shape).round()
+            # Rescale boxes from img_size to img0 size
+            det[:, :4] = scale_coords(img.shape[2:], det[:, :4], img0.shape).round()
 
+            # 判定結果の人数をpeopleに追加
             people = np.append(people, int((det[:, -1] == 0).sum()))
 
             # Write results
             for *xyxy, conf, cls in reversed(det):
-                if opt.save_txt:  # Write to file
-                    xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)
-                                      ) / gn).view(-1).tolist()  # normalized xywh
+                # テキストファイルに書き込み
+                if opt.save_txt: 
+                    xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
                     # label format
-                    line = (
-                        cls, *xywh, conf) if opt.save_conf else (cls, *xywh)
+                    line = (cls, *xywh, conf) if opt.save_conf else (cls, *xywh)
                     with open(txt_path + '.txt', 'a') as f:
                         f.write(('%g ' * len(line)).rstrip() % line + '\n')
 
-                if save_img or opt.save_crop or view_img:  # Add bbox to image
+                # 画像に処理結果を描画
+                if save_img or opt.save_crop or view_img: 
                     c = int(cls)  # integer class
-                    label = None if opt.hide_labels else (
-                        names[c] if opt.hide_conf else f'{names[c]} {conf:.2f}')
-                    plot_one_box(xyxy, im0, label=label, color=colors(
-                        c, True), line_thickness=opt.line_thickness)
+                    label = None if opt.hide_labels else (names[c] if opt.hide_conf else f'{names[c]} {conf:.2f}')
+                    plot_one_box(xyxy, img0, label=label, color=colors(c, True), line_thickness=opt.line_thickness)
                     if opt.save_crop:
-                        save_one_box(
-                            xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
+                        save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
 
+    # 処理結果を出力
     print(np.argmax(np.bincount(people)))
 
-    # Print time (inference + NMS)
-    # print(f'{s}Done. ({t2 - t1:.3f}s)')
-
-    # Stream results
+    # 処理結果をimshow
     if view_img:
-        cv2.imshow(str(p), im0)
+        cv2.imshow(str(p), img0)
         cv2.waitKey(1)  # 1 millisecond
 
-    # Save results (image with detections)
+    # 画像を動画として保存
     if save_img:
         if vid_path != save_path:  # new video
             vid_path = save_path
             if isinstance(vid_writer, cv2.VideoWriter):
                 vid_writer.release()  # release previous video writer
 
-            fps, w, h = 30, im0.shape[1], im0.shape[0]
+            fps, w, h = 30, img0.shape[1], img0.shape[0]
             save_path += '.mp4'
-            vid_writer = cv2.VideoWriter(
-                save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
-        vid_writer.write(im0)
+            vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
+        vid_writer.write(img0)
+        
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
