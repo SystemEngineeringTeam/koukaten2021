@@ -2,32 +2,29 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 
-Vue.use(Vuex);
-
-export default new Vuex.Store({
+export const state = () => ({
     //変数置き
-    state:{
-        tasks:[
-            {people: 0,}
-        ],
-    },
+    nums: [
+        { people: 0, }
+    ],
+})
 
-    mutations:{
-        setPeole(state, tasks){
-            state.tasks = tasks;
-        },
-    },
+export const mutations = {
 
-    actions: {
-        async getPeople(people){
-            await axios
+    setPeole(state, nums) {
+        state.nums = nums;
+    },
+}
+
+export const actions = {
+    async getPeople(context) {
+        await axios
             .get('http://localhost:8081/people')
             .then((res) => {
-                context.commit("setPeople", );
+                context.commit("setPeople", res.data);//コ↑コ↓　わからん
             })
             .catch(() => {
                 console.log("peopelの取得が失敗しました。")
             });
-        },
     },
-});
+}

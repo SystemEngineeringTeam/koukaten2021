@@ -1,6 +1,13 @@
 <template>
-  <h1>Hello</h1>
+  <ShowNum />
 </template>
 
 <script>
+import ShowNum from '../components/ShowNum.vue'
+
+export default {
+  components: {
+    ShowNum,
+  },
+}
 </script>
