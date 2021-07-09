@@ -1,5 +1,7 @@
 <template>
-  <ShowNum />
+  <div id="app">
+      <ShowNum />
+  </div>
 </template>
 
 <script>
@@ -10,4 +12,10 @@ export default {
     ShowNum,
   },
 }
+
 </script>
+
+<style scoped>
+
+
+</style>

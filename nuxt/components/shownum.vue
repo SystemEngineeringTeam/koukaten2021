@@ -1,26 +1,46 @@
 <!--人数表示コンポーネント-->
 <template>
-    <div>
-        <!--タイトル-->
-        <h3>現在の人数</h3>
-        <div>
+  <div>
+    <v-row
+      style="height: 450px"
+      justify="center"
+      align-content="center"
+    >
+      <v-card
+        elecaiton="10"
+        width="500"
+        corol="white"
+        outlined
+        tile
+        height="150"
+      >
+        <v-responsive :aspect-raito="16 / 9">
+          <div class="main">
             <!--人数表示部分-->
-            <h3>現在：</h3><h2>{{this.$store.state.tasks}}</h2><h3>人</h3>
-        </div>
-    </div>
+            <h2>現在：</h2>
+            <h1>{{ this.$store.state.tasks }}</h1>
+            <h2>人</h2>
+          </div>
+        </v-responsive>
+      </v-card>
+    </v-row>
+  </div>
 </template>
 
 <script>
 export default {
-    name: "ShowNum"
+  name: 'ShowNum',
 }
 </script>
 
 <style scoped>
-    h2{
-        display: inline;
-    }
-    h3{
-        display: inline;
-    }
+h1 {
+  display: inline;
+}
+h2 {
+  display: inline;
+}
+.main {
+  text-align: center;
+}
 </style>
