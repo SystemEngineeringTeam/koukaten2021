@@ -1,27 +1,21 @@
 <!--人数表示コンポーネント-->
 <template>
-  <div>
-    <v-row
-      style="height: 450px"
-      justify="center"
-      align-content="center"
-    >
-      <v-card
-        elecaiton="50"
-        width="500"
-        height="250"
-      >
-        <v-responsive :aspect-raito="16 / 9">
-          <div class="main">
-            <!--人数表示部分-->
-            <h2>現在：</h2>
-            <h1>{{ this.$store.state.tasks }}</h1>
-            <h2>人</h2>
-          </div>
-        </v-responsive>
+  <v-row style="height: 450px" justify="center" align-content="center">
+    <v-col cols="6">
+      <v-card elecaiton="50" width="500" class="justify-center">
+        <v-row align="center">
+          <v-col cols="12">
+            <v-card-text class="text-center">
+              <!--人数表示部分-->
+              <h2>現在：</h2>
+              <h1>{{ this.$store.state.tasks }}</h1>
+              <h2>人</h2>
+            </v-card-text>
+          </v-col>
+        </v-row>
       </v-card>
-    </v-row>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -36,8 +30,5 @@ h1 {
 }
 h2 {
   display: inline;
-}
-.main {
-  text-align: center;
 }
 </style>
