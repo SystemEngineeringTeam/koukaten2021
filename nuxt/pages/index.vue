@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-      <ShowNum />
+      <menubar />
   </div>
 </template>
 
 <script>
-import ShowNum from '../components/ShowNum.vue'
+import menubar from '../components/menubar.vue'
 
 export default {
   components: {
-    ShowNum,
+    menubar,
   },
 }
 
