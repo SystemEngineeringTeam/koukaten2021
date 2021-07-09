@@ -7,12 +7,9 @@
       align-content="center"
     >
       <v-card
-        elecaiton="10"
+        elecaiton="50"
         width="500"
-        corol="white"
-        outlined
-        tile
-        height="150"
+        height="250"
       >
         <v-responsive :aspect-raito="16 / 9">
           <div class="main">
