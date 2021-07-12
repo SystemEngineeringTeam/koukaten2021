@@ -1,35 +1,26 @@
 <template>
-  <v-card class="mx-auto overflow-hidden" height="100%">
-    <v-app-bar color="blue" dark>
-      <v-app-bar-nav-icon @click="drawer = true"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>シス研の人数でるぞう</v-toolbar-title>
+  <v-app>
+    <v-app-bar max-height="64px" color="blue" dark>
+      <v-toolbar-title>シス研人数出る蔵</v-toolbar-title>
+      <template v-slot:extension>
+        <v-tabs　color="white" background-color="blue" centered fixed-tabs v-model="tab">
+          <v-tabs-slider color="yellow"></v-tabs-slider>
+            <v-tab v-for="item in items" :key="item.tab">
+                <v-icon>{{ item.tab }}</v-icon>
+            </v-tab>
+        </v-tabs>
+      </template>
+      <v-tabs-items v-model="tab">
+        <v-tab-item v-for="item in items" :key="item.tab">
+          <v-card flat>
+            <v-card-text>{{ item.content }}</v-card-text>
+          </v-card>
+        </v-tab-item>
+      </v-tabs-items>
     </v-app-bar>
-
-    <v-navigation-drawer v-model="drawer" absolute temporary>
-      <v-list nav dense>
-        <v-list-item-group
-          v-model="group"
-          active-class="deep-blue--text text--accent-4"
-        >
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon>mdi-home</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Home</v-list-item-title>
-          </v-list-item>
-
-          <v-list-item>
-            <v-list-item-icon>
-              <v-icon>mdi-account</v-icon>
-            </v-list-item-icon>
-            <v-list-item-title>Account</v-list-item-title>
-          </v-list-item>
-        </v-list-item-group>
-      </v-list>
-    </v-navigation-drawer>
     <ShowNum />
-  </v-card>
+  </v-app>
 </template>
 
 <script>
@@ -43,5 +34,15 @@ export default {
     drawer: false,
     group: null,
   }),
+  data() {
+    return {
+      tab: null,
+      items: [
+        { tab: 'mdi-human-greeting', content: 'Tab1' },
+        { tab: 'mdi-equalizer', content: 'Tab2' },
+        { tab: 'mdi-google-downasaur', content: 'Tab3' },
+      ],
+    }
+  },
 }
 </script>
