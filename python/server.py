@@ -10,7 +10,10 @@ def app(environ, start_response):
     if res.returncode != 0:
         message = "ERROR: Failed to run detect.py."
         status = '500 INTERNAL SERVER ERROR'
-        headers = [('Access-Control-Allow-Origin', '*')]
+        headers = [
+            ('Content-type', 'application/json; charset=utf-8'), 
+            ('Access-Control-Allow-Origin', '*')
+        ]
         start_response(status, headers)
         print(message)
         return [json.dumps({'status': status, 'message': message}).encode("utf-8")]
