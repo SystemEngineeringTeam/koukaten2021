@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import numpy as np
 import argparse
 import time
 from pathlib import Path
@@ -9,14 +9,14 @@ import torch
 import torch.backends.cudnn as cudnn
 
 from models.experimental import attempt_load
-from utils.datasets import LoadStreams, LoadImages
+from utils.datasets import LoadStreams, LoadImages, letterbox
 from utils.general import check_img_size, check_requirements, check_imshow, non_max_suppression, apply_classifier, \
     scale_coords, xyxy2xywh, strip_optimizer, set_logging, increment_path, save_one_box
 from utils.plots import colors, plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 
 
-def detect(opt):
+def old_detect(opt):
     # 引数を代入
     # source = 検出を行う画像，動画
     # weights = 検出に使用する重み
@@ -170,11 +170,7 @@ def detect(opt):
 
             # Save results (image with detections)
             if save_img:
-                if source == '0':
-                    save_path += '.jpg'
-                    cv2.imwrite(save_path, im0)
-                    return
-                elif dataset.mode == 'image':
+                if dataset.mode == 'image':
                     cv2.imwrite(save_path, im0)
                 else:  # 'video' or 'stream'
                     if vid_path != save_path:  # new video
@@ -197,6 +193,128 @@ def detect(opt):
         # print(f"Results saved to {save_dir}{s}")
 
     # print(f'Done. ({time.time() - t0:.3f}s)')
+
+
+def detect(opt):
+    # 以下初期化
+    # 保存用のディレクトリを生成
+    save_dir = increment_path(Path(opt.project) / opt.name, exist_ok=opt.exist_ok)  # increment run
+    (save_dir / 'labels' if opt.save_txt else save_dir).mkdir(parents=True, exist_ok=True)  # make dir
+
+    # 出力された画像を保存するかどうか
+    save_img = not opt.nosave and not opt.source.endswith('.txt')
+
+    # deviceを取得し，物体検知に使用するモデルをロード
+    device = select_device(opt.device)
+    model = attempt_load(opt.weights, map_location=device)  # load FP32 model
+
+    # クラスの名前を取得
+    names = model.module.names if hasattr(model, 'module') else model.names
+
+    # Letterboxで必要なパラメータ
+    stride = int(model.stride.max())
+
+    # ビデオを保存するパスとライターを初期化
+    vid_path, vid_writer = None, None
+
+    # imshowが可能かチェック
+    view_img = check_imshow()
+
+    # カメラを起動
+    cap = cv2.VideoCapture(eval(opt.source) if opt.source.isnumeric() else opt.source)
+
+    # 人数を保存する配列
+    people = np.empty(0, dtype=int)
+
+    # 何枚か撮影する
+    for frame in range(opt.k):
+        # 撮影
+        _, img0 = cap.read()
+
+        # 以下，読み取った画像を色々と変換
+
+        # Letterbox
+        img = letterbox(img0, opt.img_size, stride=stride)[0]
+
+        # Stack
+        img = np.stack(img, 0)
+
+        # Convert
+        img = img[:, :, ::-1].transpose(2, 0, 1)  # BGR to RGB, to 3x416x416
+        img = np.ascontiguousarray(img)
+
+        img = torch.from_numpy(img).to(device)
+        img = img.float()  # uint8 to fp16/32
+        img /= 255.0  # 0 - 255 to 0.0 - 1.0
+        if img.ndimension() == 3:
+            img = img.unsqueeze(0)
+
+        # 変換ここまで
+
+        # 判定
+        pred = model(img, augment=opt.augment)[0]
+
+        # Apply NMS
+        # NMSは，同じクラスとして重複して認識された状態を抑制するアルゴリズム．
+        # 例えば，同じ顔が3回認識されているといった状態を防ぐ．
+        pred = non_max_suppression(pred, opt.conf_thres, opt.iou_thres, classes=opt.classes, agnostic=opt.agnostic_nms)
+
+        # 判定結果を取り出す
+        det = pred[0]
+
+        # 保存用のパスを求める
+        p = Path(opt.source)  # to Path
+        save_path = str(save_dir / p.name)  # img.jpg
+        txt_path = str(save_dir / 'labels' / p.stem) + f'_{frame}'  # img.txt
+        
+        # normalization gain whwh
+        gn = torch.tensor(img0.shape)[[1, 0, 1, 0]]
+        # for opt.save_crop
+        imc = img0.copy() if opt.save_crop else img0 
+        if len(det):
+            # Rescale boxes from img_size to img0 size
+            det[:, :4] = scale_coords(img.shape[2:], det[:, :4], img0.shape).round()
+
+            # 判定結果の人数をpeopleに追加
+            people = np.append(people, int((det[:, -1] == 0).sum()))
+
+            # Write results
+            for *xyxy, conf, cls in reversed(det):
+                # テキストファイルに書き込み
+                if opt.save_txt: 
+                    xywh = (xyxy2xywh(torch.tensor(xyxy).view(1, 4)) / gn).view(-1).tolist()  # normalized xywh
+                    # label format
+                    line = (cls, *xywh, conf) if opt.save_conf else (cls, *xywh)
+                    with open(txt_path + '.txt', 'a') as f:
+                        f.write(('%g ' * len(line)).rstrip() % line + '\n')
+
+                # 画像に処理結果を描画
+                if save_img or opt.save_crop or view_img: 
+                    c = int(cls)  # integer class
+                    label = None if opt.hide_labels else (names[c] if opt.hide_conf else f'{names[c]} {conf:.2f}')
+                    plot_one_box(xyxy, img0, label=label, color=colors(c, True), line_thickness=opt.line_thickness)
+                    if opt.save_crop:
+                        save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
+
+    # 複数撮影した結果の，最頻値の値を出力する．
+    print(np.argmax(np.bincount(people)))
+
+    # 処理結果をimshow
+    if view_img:
+        cv2.imshow(str(p), img0)
+        cv2.waitKey(1)  # 1 millisecond
+
+    # 画像を動画として保存
+    if save_img:
+        if vid_path != save_path:  # new video
+            vid_path = save_path
+            if isinstance(vid_writer, cv2.VideoWriter):
+                vid_writer.release()  # release previous video writer
+
+            fps, w, h = 30, img0.shape[1], img0.shape[0]
+            save_path += '.mp4'
+            vid_writer = cv2.VideoWriter(save_path, cv2.VideoWriter_fourcc(*'mp4v'), fps, (w, h))
+        vid_writer.write(img0)
 
 
 if __name__ == '__main__':
@@ -244,6 +362,8 @@ if __name__ == '__main__':
                         action='store_true', help='hide labels')
     parser.add_argument('--hide-conf', default=False,
                         action='store_true', help='hide confidences')
+    parser.add_argument('--k', default=5,
+                        action='store_true', help='number of shots')
     opt = parser.parse_args()
     # check_requirements(exclude=('tensorboard', 'pycocotools', 'thop'))
 
@@ -251,6 +371,8 @@ if __name__ == '__main__':
         if opt.update:  # update all models (to fix SourceChangeWarning)
             for opt.weights in ['yolov5s.pt', 'yolov5m.pt', 'yolov5l.pt', 'yolov5x.pt']:
                 detect(opt=opt)
+                # old_detect(opt=opt)
                 strip_optimizer(opt.weights)
         else:
             detect(opt=opt)
+            # old_detect(opt=opt)
