@@ -2,15 +2,13 @@ import axios from "axios";
 
 export const state = () => ({
     //変数置き
-    nums: [
-        { people: 0, }
-    ],
+    people: 0,
 })
 
 export const mutations = {
 
-    setPeole(state, nums) {
-        state.nums = nums;
+    setPeople(state, people) {
+        state.people = people;
     },
 }
 
