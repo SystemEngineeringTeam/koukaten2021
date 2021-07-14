@@ -43,7 +43,7 @@ export default {
   data: () => ({
     drawer: false,
     group: null,
-    tab: null,
+    tab: 0,
     items: [
       { tab: 'mdi-human-greeting' },
       { tab: 'mdi-equalizer' },
