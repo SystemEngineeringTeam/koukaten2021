@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import numpy as np
 import argparse
 import time
@@ -364,7 +365,7 @@ if __name__ == '__main__':
     parser.add_argument('--k', default=5,
                         action='store_true', help='number of shots')
     opt = parser.parse_args()
-    check_requirements(exclude=('tensorboard', 'pycocotools', 'thop'))
+    # check_requirements(exclude=('tensorboard', 'pycocotools', 'thop'))
 
     with torch.no_grad():
         if opt.update:  # update all models (to fix SourceChangeWarning)
