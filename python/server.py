@@ -25,7 +25,7 @@ def app(environ, start_response):
         ('Access-Control-Allow-Origin', '*'),
     ]
     start_response(status, headers)
-    return [json.dumps({'status': status, 'people': res}).encode("utf-8")]
+    return [json.dumps({'people': res}).encode("utf-8")]
 
 with make_server('', 8082, app) as httpd:
     print("Serving on port 8082...")
