@@ -18,7 +18,7 @@ def app(environ, start_response):
         print(message)
         return [json.dumps({'status': status, 'message': message}).encode("utf-8")]
 
-    res = re.sub(r"\D", "", res.stdout.decode())
+    res = int(re.sub(r"\D", "", res.stdout.decode()))
     status = '200 OK'
     headers = [
         ('Content-type', 'application/json; charset=utf-8'),
