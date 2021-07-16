@@ -3,8 +3,9 @@ package apifuncs
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
-	"os/exec"
 )
 
 //MySQLの事も考えて構造体にあえて実装
@@ -26,36 +27,48 @@ func Getpeople(w http.ResponseWriter, r *http.Request) {
 
 	// GET
 	if r.Method == http.MethodGet {
-
-		var Guests []Guest
-
-		// TODO:関数からexec使える様にする
-		out, err := exec.Command("python", "../../python/detect.py").Output()
-		if err != nil {
-			fmt.Println("Command Exec Error.")
-		}
-		// 実行したコマンドの結果を出力
-		fmt.Printf("\n%s", string(out))
-
-		Guests = append(Guests, Guest{People: 114514})
-		//fmt.Print(Guests)
-
-		jsonBytes, err := json.Marshal(Guests)
-		//エラー処理
+		out, err := http.Get("http://host.docker.internal:8082/")
 		if err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Fprintln(w, `{"status":"Unavailable"}`)
-			fmt.Println("JSON Marshal error(Tasks)", err)
+			fmt.Println("Can't run detect.py\n", err)
+			return
+		}
+		defer out.Body.Close()
+
+		jsonBytes, err := ioutil.ReadAll(out.Body)
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			fmt.Fprintln(w, `{"status":"Unavailable"}`)
+			fmt.Println("Can't catch people(io error)\n", err)
+			return
+		}
+
+		var guest Guest
+
+		log.Print(string(jsonBytes))
+
+		if err := json.Unmarshal(jsonBytes, &guest); err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			fmt.Fprintln(w, `{"status":"Unavailable"}`)
+			fmt.Println("Can't catch people(JSON Unmarshal error)\n", err)
+			return
+		}
+
+		// 実行したコマンドの結果を出力
+		fmt.Printf("\n%d", guest.People)
+
+		jsonBytes, err = json.Marshal(guest)
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			fmt.Fprintln(w, `{"status":"Unavailable"}`)
+			fmt.Println("JSON Marshal error(People)\n", err)
 			return
 		}
 
 		jsonString := string(jsonBytes)
 
 		w.WriteHeader(http.StatusOK)
-
-		if Guests == nil {
-			jsonString = "[]"
-		}
 
 		fmt.Fprintln(w, jsonString)
 	}
