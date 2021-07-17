@@ -10,7 +10,7 @@ def camera_server_print(text):
     print(CAMERA_SERVER_STR + text)
 
 def app(environ, start_response):
-    command = ['python3', 'detect.py']
+    command = ['python3', os.path.dirname(__file__) + '/detect.py']
     res = subprocess.run(command, stdout=subprocess.PIPE)
     if res.returncode != 0:
         message = "ERROR: Failed to run detect.py."
