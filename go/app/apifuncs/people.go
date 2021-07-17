@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 )
 
@@ -45,8 +44,6 @@ func Getpeople(w http.ResponseWriter, r *http.Request) {
 		}
 
 		var guest Guest
-
-		log.Print(string(jsonBytes))
 
 		if err := json.Unmarshal(jsonBytes, &guest); err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)

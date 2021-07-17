@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
+	log.Print("起動しています...\n")
 	http.HandleFunc("/people", apifuncs.Getpeople)
 	http.ListenAndServe(":80", nil)
-	log.Print("起動しました\n")
 }
