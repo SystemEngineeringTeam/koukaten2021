@@ -271,12 +271,13 @@ def detect(opt):
         gn = torch.tensor(img0.shape)[[1, 0, 1, 0]]
         # for opt.save_crop
         imc = img0.copy() if opt.save_crop else img0 
+
+        # 判定結果の人数をpeopleに追加
+        people = np.append(people, int((det[:, -1] == 0).sum()))
+
         if len(det):
             # Rescale boxes from img_size to img0 size
             det[:, :4] = scale_coords(img.shape[2:], det[:, :4], img0.shape).round()
-
-            # 判定結果の人数をpeopleに追加
-            people = np.append(people, int((det[:, -1] == 0).sum()))
 
             # Write results
             for *xyxy, conf, cls in reversed(det):
