@@ -1,14 +1,15 @@
 swagger: '2.0'
 info:
   version: "1.0"
-  title: 'シス研人数出る霜'
+  title: 'シス研人数出る蔵'
   description: 'シス研の部室にいる人の人数を教えてくれる'
-tags: 
+tags:
 - name: "people"
+- name: "graph"
 
 paths:
   /people:
-    post:
+    get:
       tags:
       - "people"
       summary: "今部屋にいる人数を返す"
@@ -20,8 +21,87 @@ paths:
       responses:
         200:
           description: 'response'
+          schema:
+            type: 'object'
+            properties:
+              status: 
+                type: 'string'
+                example: '200 OK'
+              people:
+                type: 'number'
+              date: 
+                type: 'string'
+                format: 'yyyy-mm-dd hh:mm'
+                example: '2021-07-22 20:55'
+
+        500:
+          description: 'response'
+          schema:
+            type: 'object'
+            properties:
+              status: 
+                type: 'string'
+                example: '500 INTERNAL SERVER ERROR'
+              message:
+                type: 'string'
+                example: 'ERROR: Failed to run detect.py.'
+
+  /graph:
+    get:
+      tags:
+      - "graph"
+      summary: "グラフの表示に必要なデータを返す"
+      description: ""
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        200:
+          description: 'response'
           schema: 
             type: 'object'
             properties:
-              people:
-                type: 'number'
+              status: 
+                type: 'string'
+                example: '200 OK'
+              monday:
+                type: 'array'
+                items:
+                  type: 'integer'
+              tuesday:
+                type: 'array'
+                items:
+                  type: 'integer'
+              wednesday:
+                type: 'array'
+                items:
+                  type: 'integer'
+              thursday:
+                type: 'array'
+                items:
+                  type: 'integer'
+              friday:
+                type: 'array'
+                items:
+                  type: 'integer'
+              saturday:
+                type: 'array'
+                items:
+                  type: 'integer'
+              sunday:
+                type: 'array'
+                items:
+                  type: 'integer'
+
+        500:
+          description: 'response'
+          schema: 
+            type: 'object'
+            properties:
+              status: 
+                type: 'string'
+                example: '500 INTERNAL SERVER ERROR'
+              message:
+                type: 'string'
+                example: 'ERROR: Failed to run detect.py.'
