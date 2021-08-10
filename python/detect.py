@@ -15,6 +15,8 @@ from utils.general import check_img_size, check_requirements, check_imshow, non_
 from utils.plots import colors, plot_one_box
 from utils.torch_utils import select_device, load_classifier, time_synchronized
 
+import time
+
 
 def old_detect(opt):
     # 引数を代入
@@ -228,6 +230,7 @@ def detect(opt):
 
     # 何枚か撮影する
     for frame in range(opt.k):
+        start = time.time()
         # 撮影
         _, img0 = cap.read()
 
@@ -251,6 +254,9 @@ def detect(opt):
 
         # 変換ここまで
 
+        print("変換: " + str(time.time() - start))
+        start = time.time()
+
         # 判定
         pred = model(img, augment=opt.augment)[0]
 
@@ -261,6 +267,8 @@ def detect(opt):
 
         # 判定結果を取り出す
         det = pred[0]
+        print("判定: " + str(time.time() - start))
+        start = time.time()
 
         # 保存用のパスを求める
         p = Path(opt.source)  # to Path
@@ -296,6 +304,8 @@ def detect(opt):
                     plot_one_box(xyxy, img0, label=label, color=colors(c, True), line_thickness=opt.line_thickness)
                     if opt.save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
+        print("描画: " + str(time.time() - start))
+        start = time.time()
 
     # 複数撮影した結果の，最頻値の値を出力する．
     print(np.argmax(np.bincount(people)))
