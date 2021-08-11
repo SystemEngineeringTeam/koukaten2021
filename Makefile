@@ -1,8 +1,4 @@
-API=koukaten2021_api
-DB=koukaten2021_mysql
-API_SERVICE=api
-DB_SERVICE=mysql
-CAMERA_SERVER_DIR=python/
+CAMERA_DIR=python/
 CAMERA_SERVER_SCRIPT=server.py
 CAMERA_SERVER_REQUIREMENTS=requirements.txt
 
@@ -24,11 +20,11 @@ up-f:
 # カメラサーバ立ち上げ
 ## バックグラウンド
 up-camera:
-	python3 $(CAMERA_SERVER_DIR)$(CAMERA_SERVER_SCRIPT) & > /dev/null 2>&1
+	python3 $(CAMERA_DIR)$(CAMERA_SERVER_SCRIPT) & > /dev/null 2>&1
 
 ## フォアグラウンド
 up-camera-f:
-	python3 $(CAMERA_SERVER_DIR)$(CAMERA_SERVER_SCRIPT)
+	python3 $(CAMERA_DIR)$(CAMERA_SERVER_SCRIPT)
 
 # 停止系
 ## 全てのサービスを停止する
