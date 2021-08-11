@@ -3,8 +3,9 @@ CAMERA_SERVER_SCRIPT=server.py
 CAMERA_SERVER_REQUIREMENTS=requirements.txt
 
 # サービスの構築
-up-build:
+build:
 	docker compose build
+	pip install -r $(CAMERA_DIR)$(CAMERA_SERVER_REQUIREMENTS)
 
 # コンテナ立ち上げ
 ## バックグラウンド
