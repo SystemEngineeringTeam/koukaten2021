@@ -6,32 +6,9 @@ CAMERA_SERVER_DIR=python/
 CAMERA_SERVER_SCRIPT=server.py
 CAMERA_SERVER_REQUIREMENTS=requirements.txt
 
-# サービスの構築及び立ち上げ
-## バックグラウンド
+# サービスの構築
 up-build:
-	docker compose up -d --build
-	@make up-camera
-
-up-api:
-	docker compose up -d --build $(API_SERVICE)
-	@make up-camera
-
-up-database:
-	docker compose up -d --build $(DB_SERVICE)
-	@make up-camera
-
-## フォアグラウンド
-up-build-f:
-	docker compose up --build &
-	@make up-camera-f
-
-up-api-f:
-	docker compose up --build $(API_SERVICE) &
-	@make up-camera-f
-
-up-database-f:
-	docker compose up -d --build $(DB_SERVICE) &
-	@make up-camera-f
+	docker compose build
 
 # コンテナ立ち上げ
 ## バックグラウンド
@@ -73,49 +50,8 @@ down:
 	docker compose down
 	@make stop-camera
 
-## ボリュームも消す
-down-v:
-	docker compose down -v
-	@make stop-camera
-
-## Composeファイルで定義していないサービス用のコンテナも削除
-down-ro:
-	docker compose down --remove-orphans
-	@make stop-camera
-
 # サービスの再起動
 restart:
 	docker-compose restart
 	@make stop-camera
 	@make up-camera
-
-# その他
-## データベースコンテナに入る
-sh-database:
-	docker exec -it $(DB) bash
-
-## APIコンテナに入る
-sh-api:
-	docker exec -it $(API) sh
-
-## 全てのサービスのログを出力する
-logs:
-	docker compose logs
-
-## コンテナ一覧
-ps:
-	docker compose ps
-
-## イメージの一覧を表示
-images:
-	docker compose images
-
-## 全て消し
-destroy:
-	docker compose down --volumes --remove-orphans
-	@make stop-camera
-
-## イメージも消す
-destroy-with-image:
-	docker compose down --rmi all --volumes --remove-orphans
-	@make stop-camera
