@@ -1,4 +1,4 @@
-use back;
+use db;
 
 CREATE TABLE `people` (
 	`id` SERIAL NOT NULL,
