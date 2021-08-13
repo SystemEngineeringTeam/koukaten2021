@@ -1,10 +1,13 @@
 <!--グラフ表示コンポーネント-->
 <template>
-  <v-row style="height: 450px" justify="center" align-content="center">
-    <v-col cols="6">
-      <v-card elecaiton="50" class="justify-center">
+  <v-row style="height: 500px" justify="center" align-content="center">
+    <v-col cols="8">
+      <v-card class="justify-center">
+        <v-col cols="12" sm="3">
+          <v-select :items="items" label=" day of week" outlined></v-select>
+        </v-col>
         <v-row align="center">
-          <v-col cols="12">
+          <v-col align="center">
             <v-sparkline
               :value="value"
               :gradient="gradient"
@@ -16,7 +19,6 @@
               :fill="fill"
               :type="type"
               :auto-line-width="autoLineWidth"
-              :show-labels="true"
               auto-draw
             ></v-sparkline>
           </v-col>
@@ -41,15 +43,26 @@ export default {
   data: () => ({
     width: 2,
     radius: 0,
-    padding: 5,
+    padding: 8,
     lineCap: 'round',
     gradient: gradients[5],
-    value: [0, 2, 5, 9, 5, 20, 3, 5, 0, 0, 1, 8, 2, 9, 0],
+    value: [
+      0, 2, 5, 9, 5, 20, 3, 5, 0, 0, 1, 8, 2, 9, 0, 0, 2, 5, 9, 5, 20, 3, 5, 0,
+    ],
     gradientDirection: 'top',
     gradients,
     fill: false,
     type: 'trend',
     autoLineWidth: false,
+    items: [
+      '月曜日',
+      '火曜日',
+      '水曜日',
+      '木曜日',
+      '金曜日',
+      '土曜日',
+      '日曜日',
+    ],
   }),
 }
 </script>
