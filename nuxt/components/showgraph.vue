@@ -4,6 +4,7 @@
     <v-col cols="8">
       <v-card class="justify-center">
         <v-col cols="12" sm="3">
+            <h3>人数予想</h3>
           <v-select :items="items" label=" day of week" outlined></v-select>
         </v-col>
         <v-row align="center">
@@ -19,6 +20,7 @@
               :fill="fill"
               :type="type"
               :auto-line-width="autoLineWidth"
+              :show-labels="true"
               auto-draw
             ></v-sparkline>
           </v-col>
@@ -29,6 +31,13 @@
 </template>
 
 <script>
+import monday from "../store/index.js"
+import tuesday from "../store/index.js"
+import wednesday from "../store/index.js"
+import thursday from "../store/index.js"
+import friday from "../store/index.js"
+import saturday from "../store/index.js"
+import sunday from "../store/index.js"
 const gradients = [
   ['#222'],
   ['#42b3f4'],
@@ -46,13 +55,11 @@ export default {
     padding: 8,
     lineCap: 'round',
     gradient: gradients[5],
-    value: [
-      0, 2, 5, 9, 5, 20, 3, 5, 0, 0, 1, 8, 2, 9, 0, 0, 2, 5, 9, 5, 20, 3, 5, 0,
-    ],
+    value: monday,
     gradientDirection: 'top',
     gradients,
     fill: false,
-    type: 'trend',
+    type: 'bar',
     autoLineWidth: false,
     items: [
       '月曜日',
