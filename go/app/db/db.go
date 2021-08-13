@@ -15,7 +15,7 @@ const host = "koukaten2021_mysql:3306"
 func init() {
 	var err error
 
-	db, err = sql.Open("mysql", "user:password@tcp("+host+")/backend_db")
+	db, err = sql.Open("mysql", "user:password@tcp("+host+")/back")
 
 	if err != nil {
 		pc, file, line, _ := runtime.Caller(0)
