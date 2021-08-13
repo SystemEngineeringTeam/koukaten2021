@@ -24,7 +24,7 @@
           <ShowNum />
         </v-tab-item>
         <v-tab-item>
-          <h1>工事中！</h1>
+          <ShowGraph />
         </v-tab-item>
         <v-tab-item>
           <h1>工事中！</h1>
@@ -36,9 +36,11 @@
 
 <script>
 import ShowNum from '../components/ShowNum.vue'
+import ShowGraph from '../components/ShowGraph.vue'
 export default {
   components: {
     ShowNum,
+    ShowGraph,
   },
   data: () => ({
     drawer: false,
