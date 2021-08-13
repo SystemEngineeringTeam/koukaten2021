@@ -12,33 +12,33 @@ export const state = () => ({
     sunday:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 })
 
-export default monday
+// export default monday
 
 export const mutations = {
 
-    setPeople(people, num) {
-        people = num;
+    setPeople(state, num) {
+        state.people = num;
     },
-    setGraphMon(monday, vals){
-        monday = vals;
+    setGraphMon(state, vals){
+        state.monday = vals;
     },
-    setGraphTue(tuesday, vals){
-        tuesday = vals;
+    setGraphTue(state, vals){
+        state.tuesday = vals;
     },
-    setGraphWed(wednesday, vals){
-        wednesday = vals;
+    setGraphWed(state, vals){
+        state.wednesday = vals;
     },
-    setGraphThu(thursday, vals){
-        thursday = vals;
+    setGraphThu(state, vals){
+        state.thursday = vals;
     },
-    setGraphFri(friday, vals){
-        friday = vals;
+    setGraphFri(state, vals){
+        state.friday = vals;
     },
-    setGraphSat(saturday, vals){
-        saturday = vals;
+    setGraphSat(state, vals){
+        state.saturday = vals;
     },
-    setGraphSun(sunday, vals){
-        sunday = vals;
+    setGraphSun(state, vals){
+        state.sunday = vals;
     },
 }
 

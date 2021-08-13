@@ -31,13 +31,6 @@
 </template>
 
 <script>
-import monday from "../store/index.js"
-import tuesday from "../store/index.js"
-import wednesday from "../store/index.js"
-import thursday from "../store/index.js"
-import friday from "../store/index.js"
-import saturday from "../store/index.js"
-import sunday from "../store/index.js"
 const gradients = [
   ['#222'],
   ['#42b3f4'],
@@ -55,7 +48,8 @@ export default {
     padding: 8,
     lineCap: 'round',
     gradient: gradients[5],
-    value: monday,
+    value: [3, 4, 0, 10, 0, 3, 0, 3, 0, 3, 4, 0, 10, 0, 3, 0, 3, 0, 0, 0, 0, 10, 0, 3],
+    // value: this.$store.state.monday,
     gradientDirection: 'top',
     gradients,
     fill: false,
