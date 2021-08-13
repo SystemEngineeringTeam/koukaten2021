@@ -4,6 +4,7 @@ import (
 	"log"
 	"net/http"
 
+	_ "github.com/go-sql-driver/mysql"
 	"set1.ie.aitech.ac.jp/koukaten2021/apifuncs"
 )
 
