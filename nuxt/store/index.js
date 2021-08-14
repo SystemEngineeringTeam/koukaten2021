@@ -12,8 +12,6 @@ export const state = () => ({
     sunday:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 })
 
-// export default monday
-
 export const mutations = {
 
     setPeople(state, num) {
