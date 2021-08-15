@@ -5,7 +5,7 @@
       <v-card class="justify-center">
         <v-col cols="12" sm="3">
           <h3>人数予想</h3>
-          <v-select :items="items" label=" day of week" outlined></v-select>
+          <v-select v-model="selectedWoD" :items="wod" label="day of week" outlined @input="changeWoD"></v-select>
         </v-col>
         <v-row align="center">
           <v-col align="center">
@@ -61,7 +61,8 @@ export default {
     fill: false,
     type: 'bar',
     autoLineWidth: false,
-    items: [
+    selectedWoD: '',
+    wod: [
       '月曜日',
       '火曜日',
       '水曜日',
@@ -77,6 +78,59 @@ export default {
         return index
       }
       return ''
+    },
+    changeWoD: function () {
+      switch (this.selectedWoD) {
+        case '月曜日':
+          this.value = [
+            0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 4, 6, 3, 3, 2, 3, 4, 2, 2, 1, 1, 0,
+            0,
+          ]
+          // value = this.$store.state.monday;
+          break
+        case '火曜日':
+          this.value = [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 3, 2, 0, 0, 0, 0, 0,
+            0,
+          ]
+          // value = this.$store.state.tuesday;
+          break
+        case '水曜日':
+          this.value = [
+            0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0,
+            0,
+          ]
+          // value = this.$store.state.wednesday;
+          break
+        case '木曜日':
+          this.value = [
+            0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 3, 3, 2, 1, 1, 1, 3, 3, 2, 0, 0, 0,
+            0,
+          ]
+          // value = this.$store.state.thursday;
+          break
+        case '金曜日':
+          this.value = [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 4, 3, 3, 1, 0, 0, 0, 0, 0, 0, 0,
+            0,
+          ]
+          // value = this.$store.state.friday;
+          break
+        case '土曜日':
+          this.value = [
+            0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+            0,
+          ]
+          // value = this.$store.state.saturday;
+          break
+        case '日曜日':
+          this.value = [
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0,
+          ]
+          // value = this.$store.state.sunday;
+          break
+      }
     },
   },
 }
