@@ -56,7 +56,7 @@ export default {
     gradients,
     type: 'bar',
     selectedDoW: '',
-    dow: ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日'],
+    dow: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
     graphKey: Math.random(),
   }),
   methods: {
@@ -120,10 +120,10 @@ export default {
       this.graphKey = Math.random()
     },
   },
-  created: function() {
-    var date = new Date()
-    this.selectedDoW = this.dow[date.getDay() - 1]
-  }
+  created: function () {
+    let date = new Date()
+    this.selectedDoW = this.dow[date.getDay()]
+  },
 }
 </script>
 
