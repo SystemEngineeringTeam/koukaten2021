@@ -10,6 +10,7 @@ export const state = () => ({
     friday:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     saturday:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     sunday:[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    date: 0,
 })
 
 export const mutations = {
@@ -38,6 +39,9 @@ export const mutations = {
     setGraphSun(state, vals){
         state.sunday = vals;
     },
+    setDate(state, date){
+        state.data = date;
+    }
 }
 
 export const actions = {
@@ -45,7 +49,8 @@ export const actions = {
         await axios
             .get('http://localhost:8081/people')
             .then((res) => {
-                context.commit("setPeople", res.data);
+                context.commit("setPeople", res.data.people);//コ↑コ↓　わからん
+                context.commit("setDate", res.data.date);
             })
             .catch(() => {
                 console.log("peopelの取得が失敗しました。")
