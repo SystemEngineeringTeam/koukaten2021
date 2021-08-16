@@ -6,8 +6,8 @@
         <v-col cols="12" sm="3">
           <h3>人数予想</h3>
           <v-select
-            v-model="selectedWoD"
-            :items="wod"
+            v-model="selectedDoW"
+            :items="dow"
             label="day of week"
             outlined
           ></v-select>
@@ -16,15 +16,15 @@
           <v-col align="center">
             <v-sparkline
               :value="value"
-              :gradient="gradient"
-              :smooth="radius || false"
-              :padding="padding"
-              :line-width="width"
-              :stroke-linecap="lineCap"
-              :gradient-direction="gradientDirection"
-              :fill="fill"
+              :gradient="gradients[5]"
+              :smooth="0 || false"
+              :padding="8"
+              :line-width="5"
+              :stroke-linecap="round"
+              :gradient-direction="top"
+              :fill="false"
               :type="type"
-              :auto-line-width="autoLineWidth"
+              :auto-line-width="false"
               :show-labels="true"
               :key="graphKey"
               auto-draw
@@ -53,19 +53,10 @@ const gradients = [
 export default {
   name: 'ShowGraph',
   data: () => ({
-    width: 5,
-    radius: 0,
-    padding: 8,
-    lineCap: 'round',
-    gradient: gradients[5],
-    // value: this.$store.state.monday,
-    gradientDirection: 'top',
     gradients,
-    fill: false,
     type: 'bar',
-    autoLineWidth: false,
-    selectedWoD: '',
-    wod: ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日'],
+    selectedDoW: '',
+    dow: ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日'],
     graphKey: Math.random(),
   }),
   methods: {
@@ -78,7 +69,7 @@ export default {
   },
   computed: {
     value: function () {
-      switch (this.selectedWoD) {
+      switch (this.selectedDoW) {
         case '月曜日':
           return [
             0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 4, 6, 3, 3, 2, 3, 4, 2, 2, 1, 1, 0,
@@ -131,7 +122,7 @@ export default {
   },
   created: function() {
     var date = new Date()
-    this.selectedWoD = this.wod[date.getDay() - 1]
+    this.selectedDoW = this.dow[date.getDay() - 1]
     console.log('hoge')
   }
 }
