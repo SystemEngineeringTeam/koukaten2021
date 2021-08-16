@@ -80,7 +80,6 @@ export default {
     value: function () {
       switch (this.selectedWoD) {
         case '月曜日':
-        case '月曜日':
           return [
             0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 4, 6, 3, 3, 2, 3, 4, 2, 2, 1, 1, 0,
             0,
@@ -130,6 +129,11 @@ export default {
       this.graphKey = Math.random()
     },
   },
+  created: function() {
+    var date = new Date()
+    this.selectedWoD = this.wod[date.getDay() - 1]
+    console.log('hoge')
+  }
 }
 </script>
 
