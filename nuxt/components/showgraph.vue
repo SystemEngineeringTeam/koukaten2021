@@ -5,7 +5,12 @@
       <v-card class="justify-center">
         <v-col cols="12" sm="3">
           <h3>人数予想</h3>
-          <v-select v-model="selectedWoD" :items="wod" label="day of week" outlined @input="changeWoD"></v-select>
+          <v-select
+            v-model="selectedWoD"
+            :items="wod"
+            label="day of week"
+            outlined
+          ></v-select>
         </v-col>
         <v-row align="center">
           <v-col align="center">
@@ -21,6 +26,7 @@
               :type="type"
               :auto-line-width="autoLineWidth"
               :show-labels="true"
+              :key="graphKey"
               auto-draw
             >
               <template v-slot:label="item">
@@ -52,9 +58,6 @@ export default {
     padding: 8,
     lineCap: 'round',
     gradient: gradients[5],
-    value: [
-      0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 4, 6, 3, 3, 2, 3, 4, 2, 2, 1, 1, 0, 0,
-    ],
     // value: this.$store.state.monday,
     gradientDirection: 'top',
     gradients,
@@ -62,15 +65,8 @@ export default {
     type: 'bar',
     autoLineWidth: false,
     selectedWoD: '',
-    wod: [
-      '月曜日',
-      '火曜日',
-      '水曜日',
-      '木曜日',
-      '金曜日',
-      '土曜日',
-      '日曜日',
-    ],
+    wod: ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日'],
+    graphKey: Math.random(),
   }),
   methods: {
     indexToTime: function (index) {
@@ -79,58 +75,59 @@ export default {
       }
       return ''
     },
-    changeWoD: function () {
+  },
+  computed: {
+    value: function () {
       switch (this.selectedWoD) {
         case '月曜日':
-          this.value = [
+        case '月曜日':
+          return [
             0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 4, 6, 3, 3, 2, 3, 4, 2, 2, 1, 1, 0,
             0,
           ]
-          // value = this.$store.state.monday;
-          break
+        // value = this.$store.state.monday
         case '火曜日':
-          this.value = [
+          return [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 3, 2, 0, 0, 0, 0, 0,
             0,
           ]
-          // value = this.$store.state.tuesday;
-          break
+        // value = this.$store.state.tuesday
         case '水曜日':
-          this.value = [
+          return [
             0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0,
             0,
           ]
-          // value = this.$store.state.wednesday;
-          break
+        // value = this.$store.state.wednesday
         case '木曜日':
-          this.value = [
+          return [
             0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 3, 3, 2, 1, 1, 1, 3, 3, 2, 0, 0, 0,
             0,
           ]
-          // value = this.$store.state.thursday;
-          break
+        // value = this.$store.state.thursday
         case '金曜日':
-          this.value = [
+          return [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 4, 3, 3, 1, 0, 0, 0, 0, 0, 0, 0,
             0,
           ]
-          // value = this.$store.state.friday;
-          break
+        // value = this.$store.state.friday
         case '土曜日':
-          this.value = [
+          return [
             0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
             0,
           ]
-          // value = this.$store.state.saturday;
-          break
+        // value = this.$store.state.saturday
         case '日曜日':
-          this.value = [
+          return [
             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
             0,
           ]
-          // value = this.$store.state.sunday;
-          break
+        // value = this.$store.state.sunday
       }
+    },
+  },
+  watch: {
+    value: function () {
+      this.graphKey = Math.random()
     },
   },
 }
