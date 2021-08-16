@@ -61,8 +61,8 @@ export default {
   }),
   methods: {
     indexToTime: function (index) {
-      if (index % 3 === 0) {
-        return index
+      if (index % 3 === 0 && index !== 0) {
+        return index + 'h'
       }
       return ''
     },
