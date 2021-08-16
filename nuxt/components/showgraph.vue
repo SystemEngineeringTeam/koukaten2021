@@ -123,7 +123,6 @@ export default {
   created: function() {
     var date = new Date()
     this.selectedDoW = this.dow[date.getDay() - 1]
-    console.log('hoge')
   }
 }
 </script>
