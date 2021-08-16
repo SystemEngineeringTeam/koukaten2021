@@ -6,7 +6,7 @@
         <v-row align="center">
           <v-col cols="12">
             <v-card-text class="text-center">
-              <h3>最終更新時刻：ｎ月ｎ日ｎ時ｎ分</h3>
+              <h3>最終更新時刻：{{ this.$store.state.date }}</h3>
               <br /><br />
               <!--人数表示部分-->
               <h2>現在：</h2>
