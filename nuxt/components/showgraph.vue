@@ -16,16 +16,15 @@
           <v-col align="center">
             <v-sparkline
               :value="value"
-              :gradient="gradients[5]"
-              :smooth="0 || false"
-              :padding="8"
-              :line-width="5"
-              :stroke-linecap="round"
-              :gradient-direction="top"
-              :fill="false"
-              :type="bar"
-              :auto-line-width="false"
-              :show-labels="true"
+              :gradient= gradients[5]
+              padding= 8
+              line-width= 5
+              stroke-linecap='round'
+              gradient-direction='top'
+              fill= false
+              type='bar'
+              auto-line-width= false
+              show-labels= true
               :key="graphKey"
               auto-draw
             >
