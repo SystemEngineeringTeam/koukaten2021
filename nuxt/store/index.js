@@ -40,7 +40,7 @@ export const mutations = {
         state.sunday = vals;
     },
     setDate(state, date){
-        state.data = date;
+        state.date = date;
     }
 }
 
