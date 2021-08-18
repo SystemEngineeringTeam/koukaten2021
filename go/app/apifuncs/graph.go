@@ -19,26 +19,26 @@ func Getgraph(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 
 		fmt.Printf("%s %s\n", r.URL.Path, r.Method)
-		DayTime, err := db.GetDayTime()
+		GraphPeople, err := db.GetDayTime()
 		// エラー処理
 		if err != nil {
 			// ヘッダーに失敗したことを書き込む
 			w.WriteHeader(http.StatusServiceUnavailable)
 			// ついでに失敗したことをフロントがJSONとして認識できるように書き込む
-			fmt.Fprintln(w, `{"status":"Unavailable"}`)
+			fmt.Fprintln(w, `{"status":"500 INTERNAL SERVER ERROR"}`)
 			// ログにも書く
-			fmt.Println("database error(DayTime)", err)
+			fmt.Println("database error(GraphPeople)", err)
 			// 終了
 			return
 		}
 
 		// 取得したタスク一覧をByte列に変換
-		jsonBytes, err := json.Marshal(DayTime)
+		jsonBytes, err := json.Marshal(GraphPeople)
 		// エラー処理
 		if err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
-			fmt.Fprintln(w, `{"status":"Unavailable"}`)
-			fmt.Println("JSON Marshal error(DayTime)", err)
+			fmt.Fprintln(w, `{"status":"500 INTERNAL SERVER ERROR"}`)
+			fmt.Println("JSON Marshal error(GraphPeople)", err)
 			return
 		}
 

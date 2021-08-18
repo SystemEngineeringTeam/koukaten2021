@@ -1,82 +1,74 @@
 package db
 
 import (
+	"database/sql"
 	"fmt"
-	"math"
 )
 
 //構造体の中に配列を格納する
 
-type DayTime struct {
-	Monday    []int `json:"monday"`
-	Tuesday   []int `json:"tuesday"`
-	Wednesday []int `json:"wednesday"`
-	Thursday  []int `json:"thursday"`
-	Friday    []int `json:"friday"`
-	Saturday  []int `json:"saturday"`
-	Sunday    []int `json:"sunday"`
+type GraphPeople struct {
+	Status    string `json:"status"`
+	Monday    []int  `json:"monday"`
+	Tuesday   []int  `json:"tuesday"`
+	Wednesday []int  `json:"wednesday"`
+	Thursday  []int  `json:"thursday"`
+	Friday    []int  `json:"friday"`
+	Saturday  []int  `json:"saturday"`
+	Sunday    []int  `json:"sunday"`
 }
 
 //データベースからからSQLを実行し，曜日と時間毎に配列に格納する
-func GetDayTime() (DayTime, error) {
+func GetDayTime() (GraphPeople, error) {
 
-	DayTimes := DayTime{}
-	//　構造体を24時間分作成する
-	for i := 0; i < 24; i++ {
-		DayTimes.Monday = append(DayTimes.Monday, 0)
-		DayTimes.Tuesday = append(DayTimes.Tuesday, 0)
-		DayTimes.Wednesday = append(DayTimes.Wednesday, 0)
-		DayTimes.Thursday = append(DayTimes.Thursday, 0)
-		DayTimes.Friday = append(DayTimes.Friday, 0)
-		DayTimes.Saturday = append(DayTimes.Saturday, 0)
-		DayTimes.Sunday = append(DayTimes.Sunday, 0)
-	}
+	GraphPeoples := GraphPeople{}
 
 	// 月曜日から日曜日まで1時間毎に時間を格納する処理
 	for j := 1; j < 8; j++ {
 		for i := 0; i < 24; i++ {
 			// SQL文作成
-			sql := fmt.Sprintf("SELECT AVG(people_count) FROM people WHERE HOUR(datetime) = '%d' AND DAYOFWEEK(datetime) = '%d';", i, j)
+			Query := fmt.Sprintf("SELECT AVG(people_count) FROM people WHERE HOUR(datetime) = '%d' AND DAYOFWEEK(datetime) = '%d';", i, j)
 			// SQL実行
-			rows, err := db.Query(sql)
+			rows, err := db.Query(Query)
 			if err != nil {
-				return DayTime{}, err
+				return GraphPeople{}, err
 			}
+
 			// SQLを実行した結果を取得
 			defer rows.Close()
-			for rows.Next() {
-				var people_count float64
-				err := rows.Scan(&people_count)
-				if err != nil {
-					people_count = 0
-					fmt.Println(err)
-				}
+			var people_count sql.NullFloat64 = sql.NullFloat64{}
+			err = rows.Scan(&people_count)
+			if err != nil {
+				return GraphPeople{}, err
+			}
 
-				//四捨五入
-				people_count = math.Round(people_count)
-				// 時間と曜日を比較し，その時間に格納する
-				// case文
-				switch j {
-				case 1:
-					DayTimes.Monday[i] = int(people_count)
-				case 2:
-					DayTimes.Tuesday[i] = int(people_count)
-				case 3:
-					DayTimes.Wednesday[i] = int(people_count)
-				case 4:
-					DayTimes.Thursday[i] = int(people_count)
-				case 5:
-					DayTimes.Friday[i] = int(people_count)
-				case 6:
-					DayTimes.Saturday[i] = int(people_count)
-				case 7:
-					DayTimes.Sunday[i] = int(people_count)
-				default:
-					return DayTime{}, err
-				}
+			var people_countValid float64
+			if !people_count.Valid {
+				people_countValid = 0
+			} else {
+				people_countValid = people_count.Float64
+			}
+
+			switch j {
+			case 1:
+				GraphPeoples.Monday = append(GraphPeoples.Monday, int(people_countValid))
+			case 2:
+				GraphPeoples.Tuesday = append(GraphPeoples.Tuesday, int(people_countValid))
+			case 3:
+				GraphPeoples.Wednesday = append(GraphPeoples.Wednesday, int(people_countValid))
+			case 4:
+				GraphPeoples.Thursday = append(GraphPeoples.Thursday, int(people_countValid))
+			case 5:
+				GraphPeoples.Friday = append(GraphPeoples.Friday, int(people_countValid))
+			case 6:
+				GraphPeoples.Saturday = append(GraphPeoples.Saturday, int(people_countValid))
+			case 7:
+				GraphPeoples.Sunday = append(GraphPeoples.Sunday, int(people_countValid))
 			}
 		}
 	}
+	// 成功した場合において200 OK
+	GraphPeoples.Status = "200 OK"
 	// 格納したデータを返す
-	return DayTimes, nil
+	return GraphPeoples, nil
 }
