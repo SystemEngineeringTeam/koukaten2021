@@ -40,54 +40,18 @@ func GetDayTime() (DayTime, error) {
 			// SQL実行
 			rows, err := db.Query(sql)
 			if err != nil {
-				switch j {
-				case 1:
-					DayTimes.Monday[i] = 0
-				case 2:
-					DayTimes.Tuesday[i] = 0
-				case 3:
-					DayTimes.Wednesday[i] = 0
-				case 4:
-					DayTimes.Thursday[i] = 0
-				case 5:
-					DayTimes.Friday[i] = 0
-				case 6:
-					DayTimes.Saturday[i] = 0
-				case 7:
-					DayTimes.Sunday[i] = 0
-				default:
-					return DayTime{}, err
-				}
-				fmt.Printf("エラーが発生しました。 %d曜日の%d時に0を格納します。", j, i)
+				return DayTime{}, err
 			}
-			// SQLを閉じる
+			// SQLを実行した結果を取得
 			defer rows.Close()
-
-			// SQLで取得した行数だけ実行
 			for rows.Next() {
 				var people_count float64
 				err := rows.Scan(&people_count)
 				if err != nil {
-					switch j {
-					case 1:
-						DayTimes.Monday[i] = 0
-					case 2:
-						DayTimes.Tuesday[i] = 0
-					case 3:
-						DayTimes.Wednesday[i] = 0
-					case 4:
-						DayTimes.Thursday[i] = 0
-					case 5:
-						DayTimes.Friday[i] = 0
-					case 6:
-						DayTimes.Saturday[i] = 0
-					case 7:
-						DayTimes.Sunday[i] = 0
-					default:
-						return DayTime{}, err
-					}
-					fmt.Printf("エラーが発生しました。 %d曜日の%d時に0を格納します。", j, i)
+					people_count = 0
+					fmt.Println(err)
 				}
+
 				//四捨五入
 				people_count = math.Round(people_count)
 				// 時間と曜日を比較し，その時間に格納する
