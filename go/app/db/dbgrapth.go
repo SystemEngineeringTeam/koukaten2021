@@ -40,7 +40,25 @@ func GetDayTime() (DayTime, error) {
 			// SQL実行
 			rows, err := db.Query(sql)
 			if err != nil {
-				return DayTime{}, err
+				switch j {
+				case 1:
+					DayTimes.Monday[i] = 0
+				case 2:
+					DayTimes.Tuesday[i] = 0
+				case 3:
+					DayTimes.Wednesday[i] = 0
+				case 4:
+					DayTimes.Thursday[i] = 0
+				case 5:
+					DayTimes.Friday[i] = 0
+				case 6:
+					DayTimes.Saturday[i] = 0
+				case 7:
+					DayTimes.Sunday[i] = 0
+				default:
+					return DayTime{}, err
+				}
+				fmt.Printf("エラーが発生しました。 %d曜日の%d時に0を格納します。", j, i)
 			}
 			// SQLを閉じる
 			defer rows.Close()
@@ -50,7 +68,25 @@ func GetDayTime() (DayTime, error) {
 				var people_count float64
 				err := rows.Scan(&people_count)
 				if err != nil {
-					return DayTime{}, err
+					switch j {
+					case 1:
+						DayTimes.Monday[i] = 0
+					case 2:
+						DayTimes.Tuesday[i] = 0
+					case 3:
+						DayTimes.Wednesday[i] = 0
+					case 4:
+						DayTimes.Thursday[i] = 0
+					case 5:
+						DayTimes.Friday[i] = 0
+					case 6:
+						DayTimes.Saturday[i] = 0
+					case 7:
+						DayTimes.Sunday[i] = 0
+					default:
+						return DayTime{}, err
+					}
+					fmt.Printf("エラーが発生しました。 %d曜日の%d時に0を格納します。", j, i)
 				}
 				//四捨五入
 				people_count = math.Round(people_count)
