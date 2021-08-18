@@ -13,10 +13,13 @@ func Getgraph(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")    // Allow any access.
 	w.Header().Set("Access-Control-Allow-Methods", "GET") // Allowed methods.
 	w.Header().Set("Access-Control-Allow-Headers", "*")
+	// ヘッダの設定．
+	r.Header.Set("Content-Type", "application/json")
 
 	if r.Method == http.MethodGet {
-		//
-		Tasks, err := db.GetDayTime()
+
+		fmt.Printf("%s %s\n", r.URL.Path, r.Method)
+		DayTime, err := db.GetDayTime()
 		// エラー処理
 		if err != nil {
 			// ヘッダーに失敗したことを書き込む
@@ -24,18 +27,18 @@ func Getgraph(w http.ResponseWriter, r *http.Request) {
 			// ついでに失敗したことをフロントがJSONとして認識できるように書き込む
 			fmt.Fprintln(w, `{"status":"Unavailable"}`)
 			// ログにも書く
-			fmt.Println("database error(GetTasks)", err)
+			fmt.Println("database error(DayTime)", err)
 			// 終了
 			return
 		}
 
 		// 取得したタスク一覧をByte列に変換
-		jsonBytes, err := json.Marshal(Tasks)
+		jsonBytes, err := json.Marshal(DayTime)
 		// エラー処理
 		if err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
 			fmt.Fprintln(w, `{"status":"Unavailable"}`)
-			fmt.Println("JSON Marshal error(Tasks)", err)
+			fmt.Println("JSON Marshal error(DayTime)", err)
 			return
 		}
 
@@ -44,11 +47,6 @@ func Getgraph(w http.ResponseWriter, r *http.Request) {
 
 		// 成功したことをヘッダーに書き込む
 		w.WriteHeader(http.StatusOK)
-
-		// Tasksがもし空なら，空配列を返す．
-		if Tasks == nil {
-			jsonString = "[]"
-		}
 
 		// 結果を書き込んで終了．
 		fmt.Fprintln(w, jsonString)
