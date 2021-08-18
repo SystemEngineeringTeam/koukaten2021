@@ -19,7 +19,7 @@ func Getgraph(w http.ResponseWriter, r *http.Request) {
 	if r.Method == http.MethodGet {
 
 		fmt.Printf("%s %s\n", r.URL.Path, r.Method)
-		GraphPeople, err := db.GetGraph()
+		GraphPeople, err := db.GetGraphPeople()
 		// エラー処理
 		if err != nil {
 			// ヘッダーに失敗したことを書き込む

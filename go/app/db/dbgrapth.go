@@ -19,7 +19,7 @@ type GraphPeople struct {
 }
 
 //データベースからからSQLを実行し，曜日と時間毎に配列に格納する
-func GetGraph() (GraphPeople, error) {
+func GetGraphPeople() (GraphPeople, error) {
 
 	GraphPeoples := GraphPeople{}
 
