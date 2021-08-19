@@ -37,6 +37,8 @@ func GetGraphPeople() (GraphPeople, error) {
 			// SQLを実行した結果を取得
 			defer rows.Close()
 			var people_count sql.NullFloat64 = sql.NullFloat64{}
+			rows.Next()
+
 			err = rows.Scan(&people_count)
 			if err != nil {
 				return GraphPeople{}, err
