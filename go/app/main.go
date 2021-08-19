@@ -11,5 +11,6 @@ import (
 func main() {
 	log.Print("起動しています...\n")
 	http.HandleFunc("/people", apifuncs.Getpeople)
+	http.HandleFunc("/graph", apifuncs.Getgraph)
 	http.ListenAndServe(":80", nil)
 }
