@@ -13,6 +13,11 @@
               <h1>{{ this.$store.state.people }}</h1>
               <h2>人</h2>
             </v-card-text>
+            <br />
+            <v-row justify="center">
+              <v-img v-bind:src="image_src" max-width="200px"></v-img>
+            </v-row>
+            <br />
           </v-col>
         </v-row>
       </v-card>
@@ -23,6 +28,11 @@
 <script>
 export default {
   name: 'ShowNum',
+  data() {
+    return {
+      image_src: require('@/assets/meter.png'),
+    }
+  },
 }
 </script>
 

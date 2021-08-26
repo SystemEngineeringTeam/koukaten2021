@@ -22,7 +22,6 @@
       <v-tabs-items v-model="tab">
         <v-tab-item>
           <ShowNum />
-          <ShowDensity />
         </v-tab-item>
         <v-tab-item>
           <ShowGraph />
@@ -38,12 +37,10 @@
 <script>
 import ShowNum from '../components/ShowNum.vue'
 import ShowGraph from '../components/ShowGraph.vue'
-import ShowDensity from '../components/ShowDensity.vue'
 export default {
   components: {
     ShowNum,
     ShowGraph,
-    ShowDensity,
   },
   data: () => ({
     drawer: false,
