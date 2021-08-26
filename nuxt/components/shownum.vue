@@ -14,8 +14,9 @@
               <h2>人</h2>
             </v-card-text>
             <br />
+            <!-- 画像表示部分 -->
             <v-row justify="center">
-              <v-img v-bind:src="image_src" max-width="200px"></v-img>
+              <v-img v-bind:src="image_src" max-width="250px"></v-img>
             </v-row>
             <br />
           </v-col>
@@ -30,6 +31,7 @@ export default {
   name: 'ShowNum',
   data() {
     return {
+      //画像用変数
       image_src: require('@/assets/meter.png'),
     }
   },
