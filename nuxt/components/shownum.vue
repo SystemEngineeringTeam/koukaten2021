@@ -1,6 +1,11 @@
 <!--人数表示コンポーネント-->
 <template>
-  <v-row style="height: 450px" justify="center" align-content="center">
+  <v-row
+    style="height: 700px"
+    justify="center"
+    align-content="center"
+    class="bg"
+  >
     <v-col cols="6">
       <v-card elecaiton="50" class="justify-center">
         <v-row align="center">
@@ -13,6 +18,12 @@
               <h1>{{ this.$store.state.people }}</h1>
               <h2>人</h2>
             </v-card-text>
+            <br />
+            <!-- 画像表示部分 -->
+            <v-row justify="center">
+              <v-img v-bind:src="meterImage" max-width="250px"></v-img>
+            </v-row>
+            <br />
           </v-col>
         </v-row>
       </v-card>
@@ -23,6 +34,30 @@
 <script>
 export default {
   name: 'ShowNum',
+  data: () => ({
+    //画像用配列
+    meterArray: [
+      require('@/assets/images/meter_0.png'),
+      require('@/assets/images/meter_01.png'),
+      require('@/assets/images/meter_02.png'),
+      require('@/assets/images/meter_03.png'),
+      require('@/assets/images/meter_04.png'),
+      require('@/assets/images/meter_05.png'),
+      require('@/assets/images/meter_06.png'),
+      require('@/assets/images/meter_07.png'),
+      require('@/assets/images/meter_08.png'),
+      require('@/assets/images/meter_09.png'),
+      require('@/assets/images/meter_10.png'),
+    ],
+  }),
+  computed: {
+    meterImage: function () {
+      if (this.$store.state.people > 10) {
+        return this.meterArray[10]
+      }
+      return this.meterArray[this.$store.state.people]
+    },
+  },
 }
 </script>
 
@@ -37,5 +72,11 @@ h1 {
 }
 h3 {
   font-size: 20px;
+}
+.bg {
+  top: 0;
+  left: 0;
+  background-size: cover;
+  background-image: url('~@/assets/images/sysken.png');
 }
 </style>
