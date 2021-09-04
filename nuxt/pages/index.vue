@@ -1,36 +1,35 @@
 <template>
   <div id="app">
-      <v-card flat>
-        <v-toolbar color="blue" dark>
-          <v-toolbar-title>シス研人数出る蔵</v-toolbar-title>
-          <template v-slot:extension>
-            <v-tabs
-              color="white"
-              background-color="blue"
-              centered
-              fixed-tabs
-              v-model="tab"
-            >
-              <v-tabs-slider color="yellow"></v-tabs-slider>
-              <v-tab v-for="item in items" :key="item.tab">
-                <v-icon>{{ item.tab }}</v-icon>
-              </v-tab>
-            </v-tabs>
-          </template>
-        </v-toolbar>
+    <v-card flat>
+      <v-toolbar color="blue" dark>
+        <img :src="require('@/assets/images/title.png')" height="40"/>
+        <template v-slot:extension>
+          <v-tabs
+            color="white"
+            centered
+            fixed-tabs
+            v-model="tab"
+          >
+            <v-tabs-slider color="yellow"></v-tabs-slider>
+            <v-tab v-for="item in items" :key="item.tab">
+              <v-icon>{{ item.tab }}</v-icon>
+            </v-tab>
+          </v-tabs>
+        </template>
+      </v-toolbar>
 
-        <v-tabs-items v-model="tab">
-          <v-tab-item>
-            <ShowNum />
-          </v-tab-item>
-          <v-tab-item>
-            <ShowGraph />
-          </v-tab-item>
-          <v-tab-item>
-            <h1>工事中！</h1>
-          </v-tab-item>
-        </v-tabs-items>
-      </v-card>
+      <v-tabs-items v-model="tab">
+        <v-tab-item class="bg">
+          <ShowNum />
+        </v-tab-item>
+        <v-tab-item class="bg">
+          <ShowGraph />
+        </v-tab-item>
+        <v-tab-item  class="bg" style="height: 90vh">
+          <h1>工事中！</h1>
+        </v-tab-item>
+      </v-tabs-items>
+    </v-card>
   </div>
 </template>
 
@@ -51,6 +50,7 @@ export default {
       { tab: 'mdi-equalizer' },
       { tab: 'mdi-google-downasaur' },
     ],
+    title_img: '@',
   }),
 }
 </script>
@@ -58,5 +58,12 @@ export default {
 <style scoped>
 h1 {
   color: #000;
+}
+.bg {
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-size: cover;
+  background-image: url('~@/assets/images/sysken.png');
 }
 </style>

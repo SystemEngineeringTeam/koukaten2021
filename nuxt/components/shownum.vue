@@ -1,10 +1,9 @@
 <!--人数表示コンポーネント-->
 <template>
   <v-row
-    style="height: 700px"
+    style="height: 90vh"
     justify="center"
     align-content="center"
-    class="bg"
   >
     <v-col cols="6">
       <v-card elecaiton="50" class="justify-center">
@@ -76,6 +75,7 @@ h3 {
 .bg {
   top: 0;
   left: 0;
+  width: 100%;
   background-size: cover;
   background-image: url('~@/assets/images/sysken.png');
 }

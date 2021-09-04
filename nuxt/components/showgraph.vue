@@ -1,6 +1,6 @@
 <!--グラフ表示コンポーネント-->
 <template>
-  <v-row style="height: 500px" justify="center" align-content="center">
+  <v-row style="height: 90vh" justify="center" align-content="center">
     <v-col cols="8">
       <v-card class="justify-center">
         <v-col cols="12" sm="3">
