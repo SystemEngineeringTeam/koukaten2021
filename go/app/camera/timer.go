@@ -2,8 +2,8 @@ package camera
 
 import (
 	"log"
-	""
 	"time"
+
 	"set1.ie.aitech.ac.jp/koukaten2021/db"
 )
 
