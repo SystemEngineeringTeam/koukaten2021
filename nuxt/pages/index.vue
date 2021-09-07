@@ -1,9 +1,9 @@
 <template>
   <div id="app">
-    <v-card flat>
-      <v-toolbar color="blue" dark>
-        <img :src="require('@/assets/images/title.png')" height="40"/>
-        <template v-slot:extension>
+    <!-- <v-card flat> -->
+    <v-toolbar>
+      <img :src="require('@/assets/images/title_dot.png')" height="60" />
+      <!-- <template v-slot:extension>
           <v-tabs
             color="white"
             centered
@@ -15,21 +15,31 @@
               <v-icon>{{ item.tab }}</v-icon>
             </v-tab>
           </v-tabs>
-        </template>
-      </v-toolbar>
-
-      <v-tabs-items v-model="tab">
-        <v-tab-item class="bg">
-          <ShowNum />
-        </v-tab-item>
-        <v-tab-item class="bg">
-          <ShowGraph />
-        </v-tab-item>
+        </template> -->
+    </v-toolbar>
+    <v-container>
+      <row>
+        <br />
+        <!-- <v-tabs-items v-model="tab">
+        <v-tab-item class="bg"> -->
+        <ShowNum />
+      </row>
+      <!-- </v-tab-item>
+        <v-tab-item class="bg"> -->
+      <row>
+        <br />
+        <br />
+        <ShowGraph />
+        <br />
+        <br />
+      </row>
+    </v-container>
+    <!-- </v-tab-item>
         <v-tab-item  class="bg" style="height: 90vh">
           <h1>工事中！</h1>
         </v-tab-item>
-      </v-tabs-items>
-    </v-card>
+      </v-tabs-items> -->
+    <!-- </v-card> -->
   </div>
 </template>
 
@@ -62,8 +72,14 @@ h1 {
 .bg {
   top: 0;
   left: 0;
-  width: 100%;
+  height: 110hv;
   background-size: cover;
-  background-image: url('~@/assets/images/sysken.png');
+  background-image: url('~@/assets/images/bg_bar.png');
+}
+</style>
+
+<style lang="scss">
+.v-application {
+  font-family: 'DotsFont';
 }
 </style>
