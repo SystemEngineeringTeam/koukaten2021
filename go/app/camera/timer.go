@@ -14,13 +14,14 @@ var (
 
 // カメラ起動処理着火間隔(分)
 // 起動間隔は60の約数でなければならない
-const IGNITION_INTERVAL = 30
+const IGNITION_INTERVAL = 2
 
 // ResetTimer はリセットを呼び続ける関数
 func CameraTimer() {
-	t := time.Now().In(jst)        // 現在時刻を取得
-	nextDate := getNextDate(t)     // 次の日を取得
-	callResetFunc(nextDate.Sub(t)) // リセットし続けるための関数を呼ぶ
+	t := time.Now().In(jst)    // 現在時刻を取得
+	nextDate := getNextDate(t) // 次の日を取得
+	log.Println(nextDate)
+	callResetFunc(nextDate.Sub(t) + time.Second) // リセットし続けるための関数を呼ぶ
 }
 
 func getNextDate(t time.Time) time.Time {
@@ -40,7 +41,13 @@ func callResetFunc(d time.Duration) {
 
 	for t := range timer.C { // timer.Cはチャンネルから送られた現在時刻
 		// ここでカメラを起動する関数
+		log.Println("カメラ起動")
+		log.Println("カメラ起動時刻: ", t)
+		nextTime := getNextDate(t)
+		nextTimeSub := nextTime.Sub(t)
+		timer.Reset(nextTimeSub + time.Second)
 		people, err := StartCamera()
+		log.Println("人数: ", people)
 		if err != nil {
 			log.Println("カメラの読み込みに失敗しました")
 			log.Println(err)
@@ -50,6 +57,7 @@ func callResetFunc(d time.Duration) {
 				log.Println(err)
 			}
 		}
-		timer.Reset(getNextDate(t).Sub(t)) // 次の日の00:00:00に発火するように設定
+		log.Println("次回時刻: ", nextTime)
+		log.Println("次回時刻まで: ", nextTimeSub)
 	}
 }
