@@ -60,7 +60,6 @@ export default {
       { tab: 'mdi-equalizer' },
       { tab: 'mdi-google-downasaur' },
     ],
-    title_img: '@',
   }),
 }
 </script>
