@@ -14,40 +14,37 @@ var (
 
 // カメラ起動処理着火間隔(分)
 // 起動間隔は60の約数でなければならない
-const IGNITION_INTERVAL = 2
+const IGNITION_INTERVAL = 30
 
 // ResetTimer はリセットを呼び続ける関数
 func CameraTimer() {
-	t := time.Now().In(jst)    // 現在時刻を取得
-	nextDate := getNextDate(t) // 次の日を取得
-	log.Println(nextDate)
-	callResetFunc(nextDate.Sub(t) + time.Second) // リセットし続けるための関数を呼ぶ
+	t := time.Now().In(jst)               // 現在時刻を取得
+	callCameraFunc(getNextTime(t).Sub(t)) // リセットし続けるための関数を呼ぶ
 }
 
-func getNextDate(t time.Time) time.Time {
+func getNextTime(t time.Time) time.Time {
 	minute := t.Minute()                                                    // 現在の分を取得
 	minute = ((int)(minute/IGNITION_INTERVAL)+1)*IGNITION_INTERVAL - minute // 発火させる時間までの分を計算
 
-	nextDatehoge := t.Add(time.Duration(minute) * time.Minute) // minute後のデータを取得
-	Y, M, D := nextDatehoge.Date()                             // 年月日を取得
-	h := nextDatehoge.Hour()                                   // 時間を取得
-	m := nextDatehoge.Minute()                                 // 分を取得
-	nextDate := time.Date(Y, M, D, h, m, 0, 0, jst)            // 次の発火時間を取得(秒を切り捨て)
+	nextDate := t.Add(time.Duration(minute) * time.Minute) // minute後のデータを取得
+	Y, M, D := nextDate.Date()                             // 年月日を取得
+	h := nextDate.Hour()                                   // 時間を取得
+	m := nextDate.Minute()                                 // 分を取得
+
+	nextDate = time.Date(Y, M, D, h, m, 1, 0, jst) // 次の発火時間を取得(ミリ秒を切り捨て)
 	return nextDate
 }
 
-func callResetFunc(d time.Duration) {
+func callCameraFunc(d time.Duration) {
 	timer := time.NewTimer(d)
 
 	for t := range timer.C { // timer.Cはチャンネルから送られた現在時刻
 		// ここでカメラを起動する関数
 		log.Println("カメラ起動")
-		log.Println("カメラ起動時刻: ", t)
-		nextTime := getNextDate(t)
-		nextTimeSub := nextTime.Sub(t)
-		timer.Reset(nextTimeSub + time.Second)
+
+		timer.Reset(getNextTime(t).Sub(t))
+
 		people, err := StartCamera()
-		log.Println("人数: ", people)
 		if err != nil {
 			log.Println("カメラの読み込みに失敗しました")
 			log.Println(err)
@@ -57,7 +54,5 @@ func callResetFunc(d time.Duration) {
 				log.Println(err)
 			}
 		}
-		log.Println("次回時刻: ", nextTime)
-		log.Println("次回時刻まで: ", nextTimeSub)
 	}
 }
