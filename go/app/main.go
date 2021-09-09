@@ -14,6 +14,5 @@ func main() {
 	http.HandleFunc("/people", apifuncs.Getpeople)
 
 	go camera.CameraTimer()
-
 	http.ListenAndServe(":80", nil)
 }
