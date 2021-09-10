@@ -14,11 +14,11 @@
         </v-col>
         <v-row align="center">
           <v-col align="center">
-            <line_chart
-              v-if="loaded"
-              v-bind:chart-value="computed.value"
+            <Chart
+              :datasets="datasets"
+              :labels="graphLabels"
+              :options="graphOptions"
             />
-            </line_chart>
           </v-col>
         </v-row>
       </v-card>
@@ -27,38 +27,88 @@
 </template>
 
 <script>
+import Chart from './barchart.vue'
 
-import Chart from './line_chart';
+// グラフのラベル(定数)
+const graphLabels = [...Array(24).keys()].map((element) => {
+  return element + 'h'
+})
 
-const gradients = [
-  ['#222'],
-  ['#42b3f4'],
-  ['red', 'orange', 'yellow'],
-  ['purple', 'violet'],
-  ['#00c6ff', '#F0F', '#FF0'],
-  ['#f72047', '#ffd200', '#1feaea'],
+// グラフの設定定数)
+const graphOptions = {
+  scales: {
+    y: {
+      beginAtZero: true,
+      max: 10,
+      ticks: {
+        stepSize: 5,
+        callback: function (value) {
+          return value + '人'
+        },
+      },
+      grid: {
+        color: '#151515',
+      },
+    },
+    x: {
+      beginAtZero: true,
+    },
+  },
+  plugins: {
+    legend: {
+      display: false,
+    },
+  },
+  responsive: true,
+  maintainAspectRatio: false,
+}
+
+// 曜日(定数)
+const dow = [
+  '日曜日',
+  '月曜日',
+  '火曜日',
+  '水曜日',
+  '木曜日',
+  '金曜日',
+  '土曜日',
 ]
 
 export default {
   name: 'ShowGraph',
-  data: () => ({
-    gradients,
-    selectedDoW: '',
-    dow: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
-    graphKey: Math.random(),
-    chartdata: {
-    }
-  }),
-  methods: {
-    indexToTime: function (index) {
-      if (index % 3 === 0 && index !== 0) {
-        return index + 'h'
-      }
-      return ''
-    },
+  components: {
+    Chart,
   },
+  data: () => ({
+    selectedDoW: '',
+  }),
   computed: {
-    value: function () {
+    datasets: function () {
+      return [
+        {
+          label: '人数',
+          data: this.graphValue,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)',
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)',
+          ],
+          borderWidth: 1,
+        },
+      ]
+    },
+    graphValue: function () {
       switch (this.selectedDoW) {
         case '月曜日':
           return [
@@ -105,17 +155,15 @@ export default {
       }
     },
   },
-  watch: {
-    value: function () {
-      this.graphKey = Math.random()
-    },
-  },
+
   created: function () {
+    // 定数をthisに定義
+    this.graphLabels = graphLabels
+    this.graphOptions = graphOptions
+    this.dow = dow
+
     let date = new Date()
     this.selectedDoW = this.dow[date.getDay()]
-  },
-  components: {
-    Chart,
   },
 }
 </script>
