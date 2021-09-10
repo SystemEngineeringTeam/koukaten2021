@@ -7,6 +7,7 @@
           <h3>人数予想</h3>
           <v-select
             v-model="selectedDoW"
+            height=""
             :items="dow"
             label="day of week"
             outlined
