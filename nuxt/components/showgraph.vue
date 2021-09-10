@@ -14,24 +14,11 @@
         </v-col>
         <v-row align="center">
           <v-col align="center">
-            <v-sparkline
-              :value="value"
-              :gradient= gradients[5]
-              padding= 8
-              line-width= 5
-              stroke-linecap='round'
-              gradient-direction='top'
-              fill= false
-              type='bar'
-              auto-line-width= false
-              show-labels= true
-              :key="graphKey"
-              auto-draw
-            >
-              <template v-slot:label="item">
-                {{ indexToTime(item.index) }}
-              </template>
-            </v-sparkline>
+            <line_chart
+              v-if="loaded"
+              v-bind:chart-value="computed.value"
+            />
+            </line_chart>
           </v-col>
         </v-row>
       </v-card>
@@ -40,6 +27,9 @@
 </template>
 
 <script>
+
+import Chart from './line_chart';
+
 const gradients = [
   ['#222'],
   ['#42b3f4'],
@@ -56,6 +46,8 @@ export default {
     selectedDoW: '',
     dow: ['日曜日', '月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日'],
     graphKey: Math.random(),
+    chartdata: {
+    }
   }),
   methods: {
     indexToTime: function (index) {
@@ -121,6 +113,9 @@ export default {
   created: function () {
     let date = new Date()
     this.selectedDoW = this.dow[date.getDay()]
+  },
+  components: {
+    Chart,
   },
 }
 </script>
