@@ -1,7 +1,7 @@
 <!--人数表示コンポーネント-->
 <template>
   <v-row justify="center" align-content="center">
-    <v-col :cols="height">
+    <v-col :cols="width">
       <v-card elecaiton="50" class="justify-center" outlined>
         <v-row align="center">
           <v-col cols="12">
@@ -52,7 +52,7 @@ export default {
       }
       return this.meterArray[this.$store.state.people]
     },
-    height: function() {
+    width: function() {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs':
           return 11

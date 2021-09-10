@@ -1,7 +1,7 @@
 <!--グラフ表示コンポーネント-->
 <template>
   <v-row justify="center" align-content="center">
-    <v-col :cols="height">
+    <v-col :cols="width">
       <v-card class="justify-center" outlined>
         <v-col cols="12" sm="3">
           <h3>人数予想</h3>
@@ -112,7 +112,7 @@ export default {
         // value = this.$store.state.sunday
       }
     },
-    height: function () {
+    width: function () {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs':
           return 11
