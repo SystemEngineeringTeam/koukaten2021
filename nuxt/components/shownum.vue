@@ -10,7 +10,7 @@
               <br /><br />
               <!--人数表示部分-->
               <h2>現在：</h2>
-              <h1>{{this.$vuetify.breakpoint.name}}</h1>
+              <h1>{{this.$store.state.people }}</h1>
               <h2>人</h2>
             </v-card-text>
             <br />
