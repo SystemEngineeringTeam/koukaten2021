@@ -34,7 +34,7 @@ const graphLabels = [...Array(24).keys()].map((element) => {
   return element + 'h'
 })
 
-// グラフの設定定数)
+// グラフの設定(定数)
 const graphOptions = {
   scales: {
     y: {
