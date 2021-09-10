@@ -1,12 +1,11 @@
 <template>
   <div id="app">
-    <v-card flat>
-      <v-toolbar color="blue" dark>
-        <v-toolbar-title>シス研人数出る蔵</v-toolbar-title>
-        <template v-slot:extension>
+    <!-- <v-card flat> -->
+    <v-toolbar>
+      <img :src="require('@/assets/images/title_dot.png')" height="60" />
+      <!-- <template v-slot:extension>
           <v-tabs
             color="white"
-            background-color="blue"
             centered
             fixed-tabs
             v-model="tab"
@@ -16,21 +15,31 @@
               <v-icon>{{ item.tab }}</v-icon>
             </v-tab>
           </v-tabs>
-        </template>
-      </v-toolbar>
-
-      <v-tabs-items v-model="tab">
-        <v-tab-item>
-          <ShowNum />
-        </v-tab-item>
-        <v-tab-item>
-          <ShowGraph />
-        </v-tab-item>
-        <v-tab-item>
+        </template> -->
+    </v-toolbar>
+    <v-container>
+      <row>
+        <br />
+        <!-- <v-tabs-items v-model="tab">
+        <v-tab-item class="bg"> -->
+        <ShowNum />
+      </row>
+      <!-- </v-tab-item>
+        <v-tab-item class="bg"> -->
+      <row>
+        <br />
+        <br />
+        <ShowGraph />
+        <br />
+        <br />
+      </row>
+    </v-container>
+    <!-- </v-tab-item>
+        <v-tab-item  class="bg" style="height: 90vh">
           <h1>工事中！</h1>
         </v-tab-item>
-      </v-tabs-items>
-    </v-card>
+      </v-tabs-items> -->
+    <!-- </v-card> -->
   </div>
 </template>
 
@@ -58,5 +67,18 @@ export default {
 <style scoped>
 h1 {
   color: #000;
+}
+.bg {
+  top: 0;
+  left: 0;
+  height: 110hv;
+  background-size: cover;
+  background-image: url('~@/assets/images/bg_bar.png');
+}
+</style>
+
+<style lang="scss">
+.v-application {
+  font-family: 'DotsFont';
 }
 </style>

@@ -1,8 +1,8 @@
 <!--グラフ表示コンポーネント-->
 <template>
-  <v-row style="height: 500px" justify="center" align-content="center">
+  <v-row justify="center" align-content="center">
     <v-col cols="8">
-      <v-card class="justify-center">
+      <v-card class="justify-center" outlined>
         <v-col cols="12" sm="3">
           <h3>人数予想</h3>
           <v-select

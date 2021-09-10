@@ -12,14 +12,14 @@
     "@nuxtjs/axios": "^5.13.6",
     "@nuxtjs/pwa": "^3.3.5",
     "chart.js": "^3.5.0",
-    "core-js": "^3.16.2",
+    "core-js": "^3.17.3",
     "nuxt": "^2.15.7",
     "vue-chartjs": "^3.5.1"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.1",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
-    "prettier": "^2.3.2"
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.4.0"
   }
 }
