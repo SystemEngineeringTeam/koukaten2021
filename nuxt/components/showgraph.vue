@@ -1,7 +1,7 @@
 <!--グラフ表示コンポーネント-->
 <template>
   <v-row justify="center" align-content="center">
-    <v-col cols="8">
+    <v-col :cols="height">
       <v-card class="justify-center" outlined>
         <v-col cols="12" sm="3">
           <h3>人数予想</h3>
@@ -16,15 +16,15 @@
           <v-col align="center">
             <v-sparkline
               :value="value"
-              :gradient= gradients[5]
-              padding= 8
-              line-width= 5
-              stroke-linecap='round'
-              gradient-direction='top'
-              fill= false
-              type='bar'
-              auto-line-width= false
-              show-labels= true
+              :gradient="gradients[5]"
+              padding="8"
+              line-width="5"
+              stroke-linecap="round"
+              gradient-direction="top"
+              fill="false"
+              type="bar"
+              auto-line-width="false"
+              show-labels="true"
               :key="graphKey"
               auto-draw
             >
@@ -110,6 +110,20 @@ export default {
             0,
           ]
         // value = this.$store.state.sunday
+      }
+    },
+    height: function () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return 11
+        case 'sm':
+          return 8
+        case 'md':
+          return 8
+        case 'lg':
+          return 8
+        case 'xl':
+          return 8
       }
     },
   },
