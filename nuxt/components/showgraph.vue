@@ -75,7 +75,6 @@ const dow = [
 ]
 
 const graphBorderColor = [
-  // 'rgba(75, 192, 192, 1)',
   'rgba(51, 204, 204, 1)',
   'rgba(51, 204, 153, 1)',
   'rgba(255, 206, 86, 1)',
@@ -84,7 +83,6 @@ const graphBorderColor = [
 ]
 
 const graphBackGroundColor = [
-  // 'rgba(75, 192, 192, 0.2)',
   'rgba(51, 204, 204, 0.2)',
   'rgba(51, 204, 153, 0.2)',
   'rgba(255, 206, 86, 0.2)',
