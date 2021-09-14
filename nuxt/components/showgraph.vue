@@ -74,6 +74,22 @@ const dow = [
   '土曜日',
 ]
 
+const graphBorderColor = [
+  'rgba(51, 204, 204, 1)',
+  'rgba(51, 204, 153, 1)',
+  'rgba(255, 206, 86, 1)',
+  'rgba(255, 159, 64, 1)',
+  'rgba(255, 99, 132, 1)',
+]
+
+const graphBackGroundColor = [
+  'rgba(51, 204, 204, 0.2)',
+  'rgba(51, 204, 153, 0.2)',
+  'rgba(255, 206, 86, 0.2)',
+  'rgba(255, 159, 64, 0.2)',
+  'rgba(255, 99, 132, 0.2)',
+]
+
 export default {
   name: 'ShowGraph',
   components: {
@@ -84,26 +100,18 @@ export default {
   }),
   computed: {
     datasets: function () {
+      let backGroundColors = this.graphValue.map(element => {
+        return this.graphBackGroundColor[Math.max(Math.ceil(element/2) - 1, 0)]
+      })
+      let borderColors = this.graphValue.map(element => {
+        return this.graphBorderColor[Math.max(Math.ceil(element/2) - 1, 0)]
+      })
       return [
         {
           label: '人数',
           data: this.graphValue,
-          backgroundColor: [
-            'rgba(255, 99, 132, 0.2)',
-            'rgba(54, 162, 235, 0.2)',
-            'rgba(255, 206, 86, 0.2)',
-            'rgba(75, 192, 192, 0.2)',
-            'rgba(153, 102, 255, 0.2)',
-            'rgba(255, 159, 64, 0.2)',
-          ],
-          borderColor: [
-            'rgba(255,99,132,1)',
-            'rgba(54, 162, 235, 1)',
-            'rgba(255, 206, 86, 1)',
-            'rgba(75, 192, 192, 1)',
-            'rgba(153, 102, 255, 1)',
-            'rgba(255, 159, 64, 1)',
-          ],
+          backgroundColor: backGroundColors,
+          borderColor: borderColors,
           borderWidth: 1,
         },
       ]
@@ -112,7 +120,7 @@ export default {
       switch (this.selectedDoW) {
         case '月曜日':
           return [
-            0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 3, 4, 6, 3, 3, 2, 3, 4, 2, 2, 1, 1, 0,
+            10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 3, 4, 6, 3, 3, 2, 3, 4, 2, 2, 1, 1, 0,
             0,
           ]
         // value = this.$store.state.monday
@@ -161,6 +169,8 @@ export default {
     this.graphLabels = graphLabels
     this.graphOptions = graphOptions
     this.dow = dow
+    this.graphBorderColor = graphBorderColor
+    this.graphBackGroundColor = graphBackGroundColor
 
     let date = new Date()
     this.selectedDoW = this.dow[date.getDay()]
