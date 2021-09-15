@@ -3,16 +3,12 @@ package apifuncs
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
+
+	"set1.ie.aitech.ac.jp/koukaten2021/db"
 )
 
-//MySQLの事も考えて構造体にあえて実装
-type Guest struct {
-	People int `json:"people"`
-}
-
-//Getで返す関数
+// Getpeopleはクライアントに対して人数と日付を伝える関数
 func Getpeople(w http.ResponseWriter, r *http.Request) {
 	// アクセスを許可したいアクセス元
 	w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -26,39 +22,22 @@ func Getpeople(w http.ResponseWriter, r *http.Request) {
 
 	// GET
 	if r.Method == http.MethodGet {
-		out, err := http.Get("http://host.docker.internal:8082/")
+		people, err := db.GetPeople()
 		if err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
-			fmt.Fprintln(w, `{"status":"Unavailable"}`)
-			fmt.Println("Can't run detect.py\n", err)
-			return
-		}
-		defer out.Body.Close()
-
-		jsonBytes, err := ioutil.ReadAll(out.Body)
-		if err != nil {
-			w.WriteHeader(http.StatusServiceUnavailable)
-			fmt.Fprintln(w, `{"status":"Unavailable"}`)
-			fmt.Println("Can't catch people(io error)\n", err)
-			return
-		}
-
-		var guest Guest
-
-		if err := json.Unmarshal(jsonBytes, &guest); err != nil {
-			w.WriteHeader(http.StatusServiceUnavailable)
-			fmt.Fprintln(w, `{"status":"Unavailable"}`)
-			fmt.Println("Can't catch people(JSON Unmarshal error)\n", err)
+			fmt.Fprintln(w, `{"status":"500 INTERNAL SERVER ERROR","message":"Can't get people from database."}`)
+			fmt.Println("Can't get people from database.\n", err)
 			return
 		}
 
 		// 実行したコマンドの結果を出力
-		fmt.Printf("\n%d", guest.People)
+		fmt.Printf("\n%d", people.People)
+		people.Status = "200 OK"
 
-		jsonBytes, err = json.Marshal(guest)
+		jsonBytes, err := json.Marshal(people)
 		if err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
-			fmt.Fprintln(w, `{"status":"Unavailable"}`)
+			fmt.Fprintln(w, `{"status":"500 INTERNAL SERVER ERROR","message":"JSON Marshal error(People)"}`)
 			fmt.Println("JSON Marshal error(People)\n", err)
 			return
 		}
