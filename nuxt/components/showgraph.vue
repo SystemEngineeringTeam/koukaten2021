@@ -3,11 +3,10 @@
   <v-row justify="center" align-content="center">
     <v-col :cols="width">
       <v-card class="justify-center" outlined>
-        <v-col cols="12" sm="3">
-          <h3>人数予想</h3>
+        <v-col cols="12" sm="4">
+          <h3>【人数予想】</h3>
           <v-select
             v-model="selectedDoW"
-            height=""
             :items="dow"
             label="day of week"
             outlined
@@ -204,5 +203,6 @@ h1 {
 }
 h3 {
   font-size: 20px;
+  margin-bottom: 10px;
 }
 </style>
