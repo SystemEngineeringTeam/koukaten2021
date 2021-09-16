@@ -1,10 +1,10 @@
 <!--グラフ表示コンポーネント-->
 <template>
   <v-row justify="center" align-content="center">
-    <v-col cols="8">
+    <v-col :cols="width">
       <v-card class="justify-center" outlined>
-        <v-col cols="12" sm="3">
-          <h3>人数予想</h3>
+        <v-col cols="12" sm="4">
+          <h3>【人数予想】</h3>
           <v-select
             v-model="selectedDoW"
             :items="dow"
@@ -162,6 +162,20 @@ export default {
         // value = this.$store.state.sunday
       }
     },
+    width: function () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return 11
+        case 'sm':
+          return 8
+        case 'md':
+          return 8
+        case 'lg':
+          return 8
+        case 'xl':
+          return 8
+      }
+    },
   },
 
   created: function () {
@@ -189,5 +203,6 @@ h1 {
 }
 h3 {
   font-size: 20px;
+  margin-bottom: 10px;
 }
 </style>

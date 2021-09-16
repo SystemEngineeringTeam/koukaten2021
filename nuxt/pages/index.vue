@@ -2,7 +2,7 @@
   <div id="app">
     <!-- <v-card flat> -->
     <v-toolbar>
-      <img :src="require('@/assets/images/title_dot.png')" height="60" />
+      <img :src="require('@/assets/images/title_dot.png')" :height="logosize" />
       <!-- <template v-slot:extension>
           <v-tabs
             color="white"
@@ -61,6 +61,22 @@ export default {
       { tab: 'mdi-google-downasaur' },
     ],
   }),
+  computed: {
+    logosize: function () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return 40
+        case 'sm':
+          return 50
+        case 'md':
+          return 60
+        case 'lg':
+          return 60
+        case 'xl':
+          return 60
+      }
+    },
+  }
 }
 </script>
 

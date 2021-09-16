@@ -1,10 +1,7 @@
 <!--人数表示コンポーネント-->
 <template>
-  <v-row
-    justify="center"
-    align-content="center"
-  >
-    <v-col cols="6">
+  <v-row justify="center" align-content="center">
+    <v-col :cols="width">
       <v-card elecaiton="50" class="justify-center" outlined>
         <v-row align="center">
           <v-col cols="12">
@@ -13,7 +10,7 @@
               <br /><br />
               <!--人数表示部分-->
               <h2>現在：</h2>
-              <h1>{{ this.$store.state.people }}</h1>
+              <h1>{{this.$store.state.people }}</h1>
               <h2>人</h2>
             </v-card-text>
             <br />
@@ -54,6 +51,20 @@ export default {
         return this.meterArray[10]
       }
       return this.meterArray[this.$store.state.people]
+    },
+    width: function() {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return 11
+        case 'sm':
+          return 8
+        case 'md':
+          return 8
+        case 'lg':
+          return 8
+        case 'xl':
+          return 8
+      }
     },
   },
 }
