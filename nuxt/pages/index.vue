@@ -47,19 +47,6 @@ export default {
 }
 </script>
 
-<style scoped>
-h1 {
-  color: #000;
-}
-.bg {
-  top: 0;
-  left: 0;
-  height: 110hv;
-  background-size: cover;
-  background-image: url('~@/assets/images/bg_bar.png');
-}
-</style>
-
 <style lang="scss">
 .v-application {
   font-family: 'DotsFont';

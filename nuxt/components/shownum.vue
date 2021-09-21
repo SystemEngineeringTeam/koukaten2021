@@ -10,6 +10,7 @@
             >
           </v-row>
           <v-row justify="center">
+            <!--人数表示部分-->
             <v-card-text
               class="text-center font-weight-bold"
               style="font-size: 2rem"
@@ -21,6 +22,7 @@
             >
           </v-row>
           <v-row justify="center">
+            <!-- 画像表示部分 -->
             <v-card-title>
               <v-img v-bind:src="meterImage" max-width="250px"></v-img>
             </v-card-title>
@@ -74,17 +76,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-h2 {
-  display: inline;
-  font-size: 32px;
-}
-h1 {
-  display: inline;
-  font-size: 64px;
-}
-h3 {
-  font-size: 20px;
-}
-</style>
