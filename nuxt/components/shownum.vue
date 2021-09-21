@@ -68,5 +68,9 @@ export default {
       return this.$store.state.date.slice(-8)
     },
   },
+
+  created() {
+    this.$store.dispatch('getPeople')
+  },
 }
 </script>

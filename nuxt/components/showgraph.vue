@@ -162,6 +162,8 @@ export default {
     this.graphBorderColor = graphBorderColor
     this.graphBackGroundColor = graphBackGroundColor
 
+    this.$store.dispatch('getGraphVal')
+
     let date = new Date()
     this.selectedDoW = this.dow[date.getDay()]
   },
