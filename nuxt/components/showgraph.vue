@@ -137,47 +137,19 @@ export default {
     graphValue: function () {
       switch (this.selectedDoW) {
         case '月曜日':
-          return [
-            10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 3, 4, 6, 3, 3, 2, 3, 4, 2, 2, 1, 1,
-            0, 0,
-          ]
-        // value = this.$store.state.monday
+          return this.$store.state.monday
         case '火曜日':
-          return [
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 2, 2, 3, 2, 0, 0, 0, 0, 0,
-            0,
-          ]
-        // value = this.$store.state.tuesday
+          return this.$store.state.tuesday
         case '水曜日':
-          return [
-            0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 2, 1, 2, 0, 0, 0, 0, 0,
-            0,
-          ]
-        // value = this.$store.state.wednesday
+          return this.$store.state.wednesday
         case '木曜日':
-          return [
-            0, 0, 0, 0, 0, 0, 0, 2, 2, 0, 0, 3, 3, 2, 1, 1, 1, 3, 3, 2, 0, 0, 0,
-            0,
-          ]
-        // value = this.$store.state.thursday
+          return this.$store.state.thursday
         case '金曜日':
-          return [
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 4, 4, 3, 3, 1, 0, 0, 0, 0, 0, 0, 0,
-            0,
-          ]
-        // value = this.$store.state.friday
+          return this.$store.state.friday
         case '土曜日':
-          return [
-            0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
-            0,
-          ]
-        // value = this.$store.state.saturday
+          return this.$store.state.saturday
         case '日曜日':
-          return [
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-            0,
-          ]
-        // value = this.$store.state.sunday
+          return this.$store.state.sunday
       }
     },
   },
