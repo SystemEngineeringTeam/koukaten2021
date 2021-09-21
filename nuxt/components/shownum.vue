@@ -6,7 +6,7 @@
         <v-container>
           <v-row justify="center">
             <v-card-title class="font-weight-bold" style="font-size: 1.25rem"
-              >最終更新時刻：{{ this.$store.state.date }}</v-card-title
+              >最終更新時刻：{{ nowTime }}</v-card-title
             >
           </v-row>
           <v-row justify="center">
@@ -62,6 +62,10 @@ export default {
         return this.meterArray[10]
       }
       return this.meterArray[this.$store.state.people]
+    },
+
+    nowTime: function () {
+      return this.$store.state.date.slice(-8)
     },
   },
 }
