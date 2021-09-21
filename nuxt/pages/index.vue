@@ -1,45 +1,12 @@
 <template>
   <div id="app">
-    <!-- <v-card flat> -->
     <v-toolbar>
       <img :src="require('@/assets/images/title_dot.png')" :height="logosize" />
-      <!-- <template v-slot:extension>
-          <v-tabs
-            color="white"
-            centered
-            fixed-tabs
-            v-model="tab"
-          >
-            <v-tabs-slider color="yellow"></v-tabs-slider>
-            <v-tab v-for="item in items" :key="item.tab">
-              <v-icon>{{ item.tab }}</v-icon>
-            </v-tab>
-          </v-tabs>
-        </template> -->
     </v-toolbar>
     <v-container>
-      <row>
-        <br />
-        <!-- <v-tabs-items v-model="tab">
-        <v-tab-item class="bg"> -->
-        <ShowNum />
-      </row>
-      <!-- </v-tab-item>
-        <v-tab-item class="bg"> -->
-      <row>
-        <br />
-        <br />
-        <ShowGraph />
-        <br />
-        <br />
-      </row>
+      <ShowNum style="padding-top: 1em; padding-bottom: 1em" />
+      <ShowGraph style="padding-bottom: 2em" />
     </v-container>
-    <!-- </v-tab-item>
-        <v-tab-item  class="bg" style="height: 90vh">
-          <h1>工事中！</h1>
-        </v-tab-item>
-      </v-tabs-items> -->
-    <!-- </v-card> -->
   </div>
 </template>
 
@@ -76,7 +43,7 @@ export default {
           return 60
       }
     },
-  }
+  },
 }
 </script>
 
