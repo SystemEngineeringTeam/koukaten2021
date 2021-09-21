@@ -18,16 +18,7 @@ export default {
     ShowNum,
     ShowGraph,
   },
-  data: () => ({
-    drawer: false,
-    group: null,
-    tab: 0,
-    items: [
-      { tab: 'mdi-human-greeting' },
-      { tab: 'mdi-equalizer' },
-      { tab: 'mdi-google-downasaur' },
-    ],
-  }),
+  
   computed: {
     logosize: function () {
       switch (this.$vuetify.breakpoint.name) {
@@ -35,11 +26,7 @@ export default {
           return 40
         case 'sm':
           return 50
-        case 'md':
-          return 60
-        case 'lg':
-          return 60
-        case 'xl':
+        default: 
           return 60
       }
     },
