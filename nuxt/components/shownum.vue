@@ -1,26 +1,31 @@
 <!--人数表示コンポーネント-->
 <template>
-  <v-row justify="center" align-content="center">
+  <v-row justify="center">
     <v-col :cols="width">
-      <v-card elecaiton="50" class="justify-center" outlined>
-        <v-row align="center">
-          <v-col cols="12">
-            <v-card-text class="text-center">
-              <h3>最終更新時刻：{{ this.$store.state.date }}</h3>
-              <br /><br />
-              <!--人数表示部分-->
-              <h2>現在：</h2>
-              <h1>{{this.$store.state.people }}</h1>
-              <h2>人</h2>
-            </v-card-text>
-            <br />
-            <!-- 画像表示部分 -->
-            <v-row justify="center">
+      <v-card outlined>
+        <v-container>
+          <v-row justify="center">
+            <v-card-title class="font-weight-bold" style="font-size: 1.25rem"
+              >最終更新時刻：{{ this.$store.state.date }}</v-card-title
+            >
+          </v-row>
+          <v-row justify="center">
+            <v-card-text
+              class="text-center font-weight-bold"
+              style="font-size: 2rem"
+              >現在：
+              <span style="font-size: 4rem">{{
+                this.$store.state.people
+              }}</span>
+              人</v-card-text
+            >
+          </v-row>
+          <v-row justify="center">
+            <v-card-title>
               <v-img v-bind:src="meterImage" max-width="250px"></v-img>
-            </v-row>
-            <br />
-          </v-col>
-        </v-row>
+            </v-card-title>
+          </v-row>
+        </v-container>
       </v-card>
     </v-col>
   </v-row>
@@ -52,7 +57,7 @@ export default {
       }
       return this.meterArray[this.$store.state.people]
     },
-    width: function() {
+    width: function () {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs':
           return 11
