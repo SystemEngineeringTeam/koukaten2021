@@ -4,7 +4,7 @@
       <img :src="require('@/assets/images/title_dot.png')" :height="logosize" />
     </v-toolbar>
     <v-container>
-      <ShowNum style="padding-top: 1rem; padding-bottom: 1rem" />
+      <ShowNum class="py-4" />
       <ShowGraph />
     </v-container>
   </div>
