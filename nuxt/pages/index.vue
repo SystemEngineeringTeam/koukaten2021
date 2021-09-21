@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import ShowNum from '../components/ShowNum.vue'
-import ShowGraph from '../components/ShowGraph.vue'
+import ShowNum from '/components/shownum.vue'
+import ShowGraph from '/components/showgraph.vue'
 export default {
   components: {
     ShowNum,
