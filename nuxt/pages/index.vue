@@ -4,8 +4,8 @@
       <img :src="require('@/assets/images/title_dot.png')" :height="logosize" />
     </v-toolbar>
     <v-container>
-      <ShowNum style="padding-top: 1em; padding-bottom: 1em" />
-      <ShowGraph style="padding-bottom: 2em" />
+      <ShowNum style="padding-top: 1rem; padding-bottom: 1rem" />
+      <ShowGraph />
     </v-container>
   </div>
 </template>
