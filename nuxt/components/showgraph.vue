@@ -1,26 +1,37 @@
 <!--グラフ表示コンポーネント-->
 <template>
-  <v-row justify="center" align-content="center">
+  <v-row justify="center">
     <v-col :cols="width">
-      <v-card class="justify-center" outlined>
-        <v-col cols="12" sm="4">
-          <h3>【人数予想】</h3>
-          <v-select
-            v-model="selectedDoW"
-            :items="dow"
-            label="day of week"
-            outlined
-          ></v-select>
-        </v-col>
-        <v-row align="center">
-          <v-col align="center">
-            <Chart
-              :datasets="datasets"
-              :labels="graphLabels"
-              :options="graphOptions"
-            />
-          </v-col>
-        </v-row>
+      <v-card outlined>
+        <v-container>
+          <v-row>
+            <v-card-text
+              class="font-weight-bold mb-n2"
+              style="font-size: 1.25rem"
+              >【人数予想】</v-card-text
+            >
+          </v-row>
+          <v-row>
+            <v-col cols="12" sm="4">
+              <v-select
+                v-model="selectedDoW"
+                :items="dow"
+                label="day of week"
+                outlined
+                class="mb-n8"
+              ></v-select>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <Chart
+                :datasets="datasets"
+                :labels="graphLabels"
+                :options="graphOptions"
+              />
+            </v-col>
+          </v-row>
+        </v-container>
       </v-card>
     </v-col>
   </v-row>
@@ -100,11 +111,13 @@ export default {
   }),
   computed: {
     datasets: function () {
-      let backGroundColors = this.graphValue.map(element => {
-        return this.graphBackGroundColor[Math.max(Math.ceil(element/2) - 1, 0)]
+      let backGroundColors = this.graphValue.map((element) => {
+        return this.graphBackGroundColor[
+          Math.max(Math.ceil(element / 2) - 1, 0)
+        ]
       })
-      let borderColors = this.graphValue.map(element => {
-        return this.graphBorderColor[Math.max(Math.ceil(element/2) - 1, 0)]
+      let borderColors = this.graphValue.map((element) => {
+        return this.graphBorderColor[Math.max(Math.ceil(element / 2) - 1, 0)]
       })
       return [
         {
@@ -120,8 +133,8 @@ export default {
       switch (this.selectedDoW) {
         case '月曜日':
           return [
-            10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 3, 4, 6, 3, 3, 2, 3, 4, 2, 2, 1, 1, 0,
-            0,
+            10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 3, 4, 6, 3, 3, 2, 3, 4, 2, 2, 1, 1,
+            0, 0,
           ]
         // value = this.$store.state.monday
         case '火曜日':
@@ -191,18 +204,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-h2 {
-  display: inline;
-  font-size: 32px;
-}
-h1 {
-  display: inline;
-  font-size: 64px;
-}
-h3 {
-  font-size: 20px;
-  margin-bottom: 10px;
-}
-</style>
