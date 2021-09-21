@@ -4,8 +4,8 @@
       <img :src="require('@/assets/images/title_dot.png')" :height="logosize" />
     </v-toolbar>
     <v-container>
-      <ShowNum class="py-4" />
-      <ShowGraph />
+      <ShowNum class="py-4" :cardwidth="cardwidth" />
+      <ShowGraph :cardwidth="cardwidth" />
     </v-container>
   </div>
 </template>
@@ -18,7 +18,7 @@ export default {
     ShowNum,
     ShowGraph,
   },
-  
+
   computed: {
     logosize: function () {
       switch (this.$vuetify.breakpoint.name) {
@@ -26,8 +26,16 @@ export default {
           return 40
         case 'sm':
           return 50
-        default: 
+        default:
           return 60
+      }
+    },
+    cardwidth: function () {
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+          return 11
+        default:
+          return 8
       }
     },
   },

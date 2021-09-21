@@ -1,7 +1,7 @@
 <!--人数表示コンポーネント-->
 <template>
   <v-row justify="center">
-    <v-col :cols="width">
+    <v-col :cols="cardwidth">
       <v-card outlined>
         <v-container>
           <v-row justify="center">
@@ -36,6 +36,9 @@
 <script>
 export default {
   name: 'ShowNum',
+
+  props: ['cardwidth'],
+
   data: () => ({
     //画像用配列
     meterArray: [
@@ -52,26 +55,13 @@ export default {
       require('@/assets/images/meter_10.png'),
     ],
   }),
+
   computed: {
     meterImage: function () {
       if (this.$store.state.people > 10) {
         return this.meterArray[10]
       }
       return this.meterArray[this.$store.state.people]
-    },
-    width: function () {
-      switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-          return 11
-        case 'sm':
-          return 8
-        case 'md':
-          return 8
-        case 'lg':
-          return 8
-        case 'xl':
-          return 8
-      }
     },
   },
 }

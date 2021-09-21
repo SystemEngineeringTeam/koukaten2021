@@ -1,7 +1,7 @@
 <!--グラフ表示コンポーネント-->
 <template>
   <v-row justify="center">
-    <v-col :cols="width">
+    <v-col :cols="cardwidth">
       <v-card outlined>
         <v-container>
           <v-row>
@@ -103,12 +103,17 @@ const graphBackGroundColor = [
 
 export default {
   name: 'ShowGraph',
+
   components: {
     Chart,
   },
+
+  props: ['cardwidth'],
+
   data: () => ({
     selectedDoW: '',
   }),
+
   computed: {
     datasets: function () {
       let backGroundColors = this.graphValue.map((element) => {
@@ -173,20 +178,6 @@ export default {
             0,
           ]
         // value = this.$store.state.sunday
-      }
-    },
-    width: function () {
-      switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-          return 11
-        case 'sm':
-          return 8
-        case 'md':
-          return 8
-        case 'lg':
-          return 8
-        case 'xl':
-          return 8
       }
     },
   },
