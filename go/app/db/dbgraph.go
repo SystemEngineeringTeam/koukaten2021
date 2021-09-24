@@ -20,12 +20,10 @@ type GraphPeople struct {
 
 //データベースからからSQLを実行し，曜日と時間毎に配列に格納する
 func GetGraphPeople() (GraphPeople, error) {
-
+	// 配列の初期化
 	GraphPeoples := GraphPeople{}
 
-	// 月曜日から日曜日まで1時間毎に時間を格納する処理
-
-	//  SQLを実行し，その分の数だけ取得
+	// SQLを実行し，その分の数だけ取得
 	Query := fmt.Sprintf("SELECT DAYOFWEEK(datetime), HOUR(datetime), AVG(people_count) FROM people GROUP BY DAYOFWEEK(datetime), HOUR(datetime);")
 	// SQL実行
 	rows, err := db.Query(Query)
@@ -41,12 +39,14 @@ func GetGraphPeople() (GraphPeople, error) {
 		var dayofweek int
 		var hour int
 		var people_count sql.NullFloat64 = sql.NullFloat64{}
+
 		// SQLの結果を受け取る
 		err = rows.Scan(&dayofweek, &hour, &people_count)
 		if err != nil {
 			return GraphPeople{}, err
 		}
-		// 曜日を判定し，その時間に人数を格納する
+
+		// nullの場合は0を代入
 		var people_countValid float64
 		if !people_count.Valid {
 			people_countValid = 0
@@ -54,6 +54,7 @@ func GetGraphPeople() (GraphPeople, error) {
 			people_countValid = people_count.Float64
 		}
 
+		// 曜日と時間に対応する配列に格納
 		switch dayofweek {
 		case 1:
 			GraphPeoples.Sunday = append(GraphPeoples.Sunday, int(people_countValid))
@@ -69,9 +70,7 @@ func GetGraphPeople() (GraphPeople, error) {
 			GraphPeoples.Friday = append(GraphPeoples.Friday, int(people_countValid))
 		case 7:
 			GraphPeoples.Saturday = append(GraphPeoples.Saturday, int(people_countValid))
-
 		}
-
 	}
 	// 成功した場合において"200 OK"と返す
 	GraphPeoples.Status = "200 OK"
