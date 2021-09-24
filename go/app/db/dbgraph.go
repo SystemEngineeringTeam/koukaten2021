@@ -24,7 +24,7 @@ func GetGraphPeople() (GraphPeople, error) {
 	GraphPeoples := GraphPeople{}
 
 	// SQLを実行し，その分の数だけ取得
-	Query := fmt.Sprintf("SELECT numbers.day, result.avg FROM (SELECT * FROM (SELECT @num := 1 AS day UNION SELECT @num := @num + 1 AS day FROM information_schema.COLUMNS LIMIT 7) AS day_numbers CROSS JOIN (SELECT @num := 0 AS hour UNION SELECT @num := @num + 1 AS hour FROM information_schema.COLUMNS LIMIT 24) AS hour_numbers ORDER BY day, hour) AS numbers LEFT OUTER JOIN (SELECT DAYOFWEEK(datetime) AS day, HOUR(datetime) AS hour, AVG(people_count) AS avg FROM people GROUP BY DAYOFWEEK(datetime), HOUR(datetime)) AS result ON result.day = numbers.day and result.hour = numbers.hour;")
+	Query := fmt.Sprintf("WITH RECURSIVE numbers AS (SELECT 0 AS NUM union all SELECT NUM + 1 FROM numbers where NUM < 24) SELECT datetime_numbers.day, result.avg FROM (SELECT * FROM (SELECT num + 1 AS day FROM numbers LIMIT 7) AS day_numbers CROSS JOIN (SELECT num AS hour FROM numbers LIMIT 24) AS hour_numbers) AS datetime_numbers LEFT OUTER JOIN (SELECT DAYOFWEEK(datetime) AS day, HOUR(datetime) AS hour, AVG(people_count) AS avg FROM people GROUP BY DAYOFWEEK(datetime), HOUR(datetime)) AS result ON datetime_numbers.day = result.day and datetime_numbers.hour = result.hour ORDER BY day, datetime_numbers.hour;")
 	// SQL実行
 	rows, err := db.Query(Query)
 	if err != nil {
