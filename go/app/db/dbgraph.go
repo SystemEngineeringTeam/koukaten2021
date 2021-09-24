@@ -24,7 +24,7 @@ func GetGraphPeople() (GraphPeople, error) {
 	GraphPeoples := GraphPeople{}
 
 	// SQLを実行し，その分の数だけ取得
-	Query := fmt.Sprintf("SELECT DAYOFWEEK(datetime), HOUR(datetime), AVG(people_count) FROM people GROUP BY DAYOFWEEK(datetime), HOUR(datetime);")
+	Query := fmt.Sprintf("SELECT DAYOFWEEK(datetime), AVG(people_count) FROM people GROUP BY DAYOFWEEK(datetime), HOUR(datetime);")
 	// SQL実行
 	rows, err := db.Query(Query)
 	if err != nil {
@@ -37,11 +37,10 @@ func GetGraphPeople() (GraphPeople, error) {
 	for rows.Next() {
 		// SQLの結果一行分を受け取る変数を宣言
 		var dayofweek int
-		var hour int
 		var people_count sql.NullFloat64 = sql.NullFloat64{}
 
 		// SQLの結果を受け取る
-		err = rows.Scan(&dayofweek, &hour, &people_count)
+		err = rows.Scan(&dayofweek, &people_count)
 		if err != nil {
 			return GraphPeople{}, err
 		}
@@ -72,6 +71,7 @@ func GetGraphPeople() (GraphPeople, error) {
 			GraphPeoples.Saturday = append(GraphPeoples.Saturday, int(people_countValid))
 		}
 	}
+
 	// 成功した場合において"200 OK"と返す
 	GraphPeoples.Status = "200 OK"
 	// 格納したデータを返す
