@@ -11,6 +11,7 @@ import schedule
 # カメラ計測間隔
 IGNITION_INTERVAL = 1
 # APIサーバホスト名
+# API_HOST = "http://172.16.6.2"
 API_HOST = "http://localhost:8081"
 
 # タイムゾーン
