@@ -6,7 +6,6 @@ import (
 
 	_ "github.com/go-sql-driver/mysql"
 	"set1.ie.aitech.ac.jp/koukaten2021/apifuncs"
-	"set1.ie.aitech.ac.jp/koukaten2021/camera"
 )
 
 func main() {
@@ -14,6 +13,5 @@ func main() {
 	http.HandleFunc("/people", apifuncs.Getpeople)
 	http.HandleFunc("/graph", apifuncs.Getgraph)
 
-	go camera.CameraTimer()
 	http.ListenAndServe(":80", nil)
 }

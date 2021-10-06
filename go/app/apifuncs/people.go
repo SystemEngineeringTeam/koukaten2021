@@ -3,10 +3,16 @@ package apifuncs
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 
 	"set1.ie.aitech.ac.jp/koukaten2021/db"
 )
+
+type peopleByCameraServer struct {
+	People   int    `json:"people"`
+	Datetime string `json:"datetime"`
+}
 
 // Getpeopleはクライアントに対して人数と日付を伝える関数
 func Getpeople(w http.ResponseWriter, r *http.Request) {
@@ -21,7 +27,36 @@ func Getpeople(w http.ResponseWriter, r *http.Request) {
 	r.Header.Set("Content-Type", "application/json")
 
 	// GET
-	if r.Method == http.MethodGet {
+	if r.Method == http.MethodPost {
+		jsonBytes, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			fmt.Fprintln(w, `{"status":"500 INTERNAL SERVER ERROR", "message": "IO error"}`)
+			fmt.Println("IO error", err)
+			return
+		}
+
+		var rec peopleByCameraServer
+
+		if err := json.Unmarshal(jsonBytes, &rec); err != nil {
+			w.WriteHeader(http.StatusServiceUnavailable)
+			fmt.Fprintln(w, `{"status":"500 INTERNAL SERVER ERROR", "message": "JSON Unmarshal error"}`)
+			fmt.Println("JSON Unmarshal error", err)
+			return
+		}
+
+		if db.InsertLog(rec.People, rec.Datetime) != nil { // insertに失敗した場合
+			w.WriteHeader(http.StatusServiceUnavailable)
+			fmt.Fprintln(w, `{"status":"500 INTERNAL SERVER ERROR", "message": "DB insert error"}`)
+			fmt.Println("DB insert error", err)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+
+		fmt.Fprintln(w, `{"status":"200 OK"}`)
+
+	} else if r.Method == http.MethodGet {
 		people, err := db.GetPeople()
 		if err != nil {
 			w.WriteHeader(http.StatusServiceUnavailable)
