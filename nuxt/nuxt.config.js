@@ -9,8 +9,8 @@ export default {
 
   // Global page headers (https://go.nuxtjs.dev/config-head)
   head: {
-    titleTemplate: '%s - nuxt',
-    title: 'シス研人数出る蔵',
+    titleTemplate: '%s - AITシステム工学研究会',
+    title: 'koukaten2021',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
