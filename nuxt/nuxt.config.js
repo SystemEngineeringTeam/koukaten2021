@@ -15,7 +15,8 @@ export default {
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'og:description', property: 'og:description', content: 'シス研の人数を確認できるナイスガイ' },
-      { hid:'og:image', property:'og:image', content:'/metaimg.png'}
+      { hid:'og:image', property:'og:image', content:'/metaimg.png'},
+      { hid:'og:url', property:'og:url', content:'https://set1.ie.aitech.ac.jp/koukaten2021/'}
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
